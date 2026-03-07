@@ -1,0 +1,21 @@
+.idea
+/public/
+/src/
+    /Base de datos
+    /clases/
+        Misiones.ts
+        PJ.ts
+        Usuario.ts
+    /config
+    /controllers
+    /middleware
+    /routes
+    /service
+    /views
+    /index.ts
+/test/
+/.gitignore
+/notas.txt
+/package.json
+/README.md
+/tsconfig.json
