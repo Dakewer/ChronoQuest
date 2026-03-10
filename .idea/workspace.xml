@@ -4,22 +4,12 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="9a7f1642-e1a7-4393-9bd8-6eee85ed079b" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/.gitignore" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/Calendario.iml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/Base de datos/index.ts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/config/index.ts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/controllers/index.ts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/middleware/index.ts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/routes/index.ts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/service/index.ts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/views/index.ts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/test/index.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
+    <list default="true" id="9a7f1642-e1a7-4393-9bd8-6eee85ed079b" name="Changes" comment="Actualizacion 3">
+      <change afterPath="$PROJECT_DIR$/public/styles/main.css" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/views/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/index.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/views/index.ts" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -63,6 +53,7 @@
   </component>
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
+    "DefaultHtmlFileTemplate": "HTML File",
     "ModuleVcsDetector.initialDetectionPerformed": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
@@ -70,7 +61,7 @@
     "RunOnceActivity.typescript.service.memoryLimit.init": "true",
     "git-widget-placeholder": "test",
     "javascript.preferred.runtime.type.id": "node",
-    "last_opened_file_path": "C:/Users/odieg/OneDrive/Desktop/ChronoQuest/test",
+    "last_opened_file_path": "C:/Users/odieg/OneDrive/Desktop/ChronoQuest/public",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
@@ -109,11 +100,25 @@
       <workItem from="1772835630655" duration="91000" />
       <workItem from="1772835765892" duration="3134000" />
       <workItem from="1772846097819" duration="729000" />
-      <workItem from="1773171090068" duration="301000" />
+      <workItem from="1773171090068" duration="923000" />
+      <workItem from="1773172475145" duration="300000" />
     </task>
+    <task id="LOCAL-00001" summary="Actualizacion 3">
+      <option name="closed" value="true" />
+      <created>1773171438829</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1773171438829</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="Actualizacion 3" />
+    <option name="LAST_COMMIT_MESSAGE" value="Actualizacion 3" />
   </component>
 </project>
