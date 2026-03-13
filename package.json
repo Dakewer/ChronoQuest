@@ -19,7 +19,6 @@
     "copyfiles": "^2.4.1",
     "express": "^5.2.1",
     "express-handlebars": "^8.0.3",
-    "mogoose": "^0.0.1-security",
     "mongoose": "^9.3.0"
   },
   "devDependencies": {
