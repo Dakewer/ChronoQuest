@@ -2,7 +2,7 @@
   "compilerOptions": {
     "target": "esnext", //"target": "ES2022",
     "module": "nodenext", //,"module": "CommonJS",
-    "moduleResolution": "node",
+    "moduleResolution": "node", // me marca error en el visual
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
     "strict": true,

@@ -1,0 +1,4 @@
+Holis,
+en teoria esta parte es solo para como seran los modelos de nuestra app.
+
+:)

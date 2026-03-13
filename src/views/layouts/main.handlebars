@@ -3,12 +3,61 @@
 <head>
     <meta charset="UTF-8">
     <title>:)</title>
+    <!-- Bostrap -->
+    <link rel="stylesheet" href="./node_modules/bootstrap/dist/css/bootstrap.min.css">
+
 </head>
 <body>
-    <header></header>
-    <main>
-        {{{body}}}
-    </main>
-    <footer></footer>
+<header></header>
+<main>
+    {{{body}}}
+
+    <!-- Cambiar color -->
+    <nav class="navbar d-none d-md-block" style="background-color: #C04000;">
+        <div class="container-fluid justify-content-center">
+            <a class="navbar-brand text-white" href="#">
+                <img src="logo.png" alt="Logo" width="30" height="30" class="d-inline-block align-text-top">
+                Mi Aplicación
+            </a>
+        </div>
+    </nav>
+
+    <div class="d-block d-md-none">
+        <nav class="navbar navbar-dark fixed-top" style="background-color: #C04000;">
+            <div class="container-fluid">
+                <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasMenu">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <a href="#" class="text-white">
+                    <i class="bi bi-bell-fill" style="font-size: 1.5rem;"></i>
+                </a>
+            </div>
+        </nav>
+
+        <nav class="navbar fixed-bottom navbar-light bg-light border-top">
+            <div class="container-fluid d-flex justify-content-around">
+                <a href="#" class="text-center text-dark text-decoration-none small"><i class="bi bi-house d-block"></i> Inicio</a>
+                <a href="#" class="text-center text-dark text-decoration-none small"><i class="bi bi-search d-block"></i> Buscar</a>
+                <a href="#" class="text-center text-dark text-decoration-none small"><i class="bi bi-plus-circle d-block"></i> Crear</a>
+                <a href="#" class="text-center text-dark text-decoration-none small"><i class="bi bi-heart d-block"></i> Favoritos</a>
+                <a href="#" class="text-center text-dark text-decoration-none small"><i class="bi bi-person d-block"></i> Perfil</a>
+            </div>
+        </nav>
+
+        <div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvasMenu">
+            <div class="offcanvas-header">
+                <h5 class="offcanvas-title">Menú</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="offcanvas"></button>
+            </div>
+            <div class="offcanvas-body">
+            </div>
+        </div>
+    </div>
+</main>
+<footer></footer>
+
+<!-- Bostrap -->
+<script src="./node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

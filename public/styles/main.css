@@ -1,17 +1,9 @@
-body {
-    background-color: #f4f7f6;
-}
-
-h1, h2, h3 {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-}
-
-p, li {
-    font-family: 'Segoe UI', sans-serif;
-    line-height: 1.6;
-}
-
-aside h2 {
-    font-size: 1.1rem;
-    letter-spacing: 1px;
+/* adaptive */
+@media (max-width: 767px) {
+    body {
+        /* barra arriba */
+        padding-top: 60px;
+        /* abajo */
+        padding-bottom: 70px;
+    }
 }
