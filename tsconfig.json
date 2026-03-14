@@ -3,7 +3,6 @@
     "target": "esnext", //"target": "ES2022",
     "module": "nodenext", //,"module": "CommonJS",
     "esModuleInterop": true,
-    "forceConsistentCasingInFileNames": true,
     "strict": true,
     "outDir": "./dist",
     "sourceMap": true

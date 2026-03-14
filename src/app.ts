@@ -4,11 +4,22 @@
 import express from "express";
 import path from "path";
 import routes from "./routes/routes";
+import { engine } from "express-handlebars";
 
-const port = process.env.PORT || 3000;
+const port = process.env.PORT || 3002;
 const app = express();
 
-// router.use(express.static(path.join(__dirname, "./../public")));
+// Configuración de handlebars
+app.engine("handlebars", engine());
+app.set("view engine", "handlebars");
+// app.set("views", "./../views");
+app.set("views", path.join(__dirname, "views"))
+
+// Archivos estáticos
+app.use(express.static(path.join(__dirname, "../public")));
+app.use('/css', express.static(path.join(__dirname, '../node_modules/bootstrap/dist/css')));
+app.use('/js', express.static(path.join(__dirname, '../node_modules/bootstrap/dist/js')))
+// no sé si se requiera despues uno de js
 
 app.use("/", routes)
 

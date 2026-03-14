@@ -1,9 +1,58 @@
-/* adaptive */
-@media (max-width: 767px) {
+/* Variables del figma */
+:root {
+    --Aventura500: #CF887F;
+    --Aventura700: #7c524c;
+    --BlancoNieve: #fcfcfc;
+    --GrisCarbon: #1f1f1f;
+    --Aventura100: #f5e7e5;
+}
+
+body {
+    background-color: #f8f9fa;
+    /* Espacio para que las barras fijas no tapen el contenido */
+    padding-top: 70px;
+    padding-bottom: 90px;
+}
+
+/* Navbar estilo RPG */
+.custom-nav {
+    background-color: var(--Aventura500) !important;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+
+/* Barra inferior móvil */
+.bottom-nav {
+    background-color: var(--Aventura500) !important;
+    height: 80px;
+    border-radius: 20px 20px 0 0;
+    padding: 0;
+}
+
+.nav-item-mobile {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    color: rgba(255, 255, 255, 0.8);
+    text-decoration: none;
+    font-size: 0.8rem;
+    transition: 0.3s;
+}
+
+.nav-item-mobile i {
+    font-size: 1.5rem;
+}
+
+.nav-item-mobile.active {
+    color: var(--BlancoNieve) !important;
+    background: var(--Aventura100) !important;
+    border-radius: 12px;
+    padding: 5px 10px;
+}
+
+/* Estilo para escritorio, quitar los espacios inferiores */
+@media (min-width: 768px) {
     body {
-        /* barra arriba */
-        padding-top: 60px;
-        /* abajo */
-        padding-bottom: 70px;
+        padding-bottom: 20px;
+        padding-top: 0px;
     }
 }
