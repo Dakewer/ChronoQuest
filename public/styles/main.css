@@ -1,38 +1,40 @@
 /* Variables del figma */
 :root {
-    --Midnight: #30011E;
-    --DarkTeal: #0B3948;
+    --Midnight: #30011E; /* primary */
+    --DarkTeal: #0B3948; /* Secundary */
     --PacificBlue: #5AB1BB;
     --BarbiePink: #FA198B;
-    --Wisteria: #BF9ACA;
+    --Wisteria: #BF9ACA; /* bono */
 }
 
 body {
     background-color: #f8f9fa;
     /* Espacio para que las barras fijas no tapen el contenido */
-    padding-top: 70px;
-    padding-bottom: 90px;
+    padding-top: 72px;
+    padding-bottom: 92px;
 }
 
 /* Navbar estilo RPG */
+/* el que esta selecionado debe que tener un fondo de --Wisteria para diferenciarlo y no hacer bajarle la intencidad a los no selecionados */
 .custom-nav {
     background-color: var(--Midnight) !important;
-    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    /* box-shadow: 0 4px 8px rgba(var(--Wisteria), 0.1) !important; */
+    border-radius: 0px 0px 20px 20px;
 }
 
 /* Barra inferior móvil */
 .bottom-nav {
     background-color: var(--Midnight) !important;
     height: 80px;
-    border-radius: 20px 20px 0 0;
     padding: 0;
+    border-radius: 0px 0px 0px 0px;
 }
 
 .nav-item-mobile {
     display: flex;
     flex-direction: column;
     align-items: center;
-    color: rgba(255, 255, 255, 0.8);
+    color: var(--PacificBlue) !important; ;
     text-decoration: none;
     font-size: 0.8rem;
     transition: 0.3s;
@@ -42,11 +44,12 @@ body {
     font-size: 1.5rem;
 }
 
+/* Falta el fondo del color rosa bajo --Wisteria para diferenciar el activo y el que no esta activo */
 .nav-item-mobile.active {
     color: var(--PacificBlue) !important;
-    background: var(--Wisteria) !important;
+    background: rgba(var(--Wisteria), 100%) !important;
     border-radius: 12px;
-    padding: 5px 10px;
+    padding: 6px 12px;
 }
 
 /* Estilo para escritorio, quitar los espacios inferiores */
@@ -54,5 +57,8 @@ body {
     body {
         padding-bottom: 20px;
         padding-top: 0px;
+    }
+    .bottom-nav {
+        border-radius: 20px 20px 0 0;
     }
 }
