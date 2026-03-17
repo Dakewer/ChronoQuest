@@ -5,9 +5,12 @@ import express from "express";
 import path from "path";
 import routes from "./routes/routes";
 import { engine } from "express-handlebars";
+import { connectDB } from "./dataBase/index";
 
-const port = process.env.PORT || 3002;
+const port = process.env.PORT || 3000;
 const app = express();
+
+connectDB();
 
 // Configuración de handlebars
 app.engine("handlebars", engine());

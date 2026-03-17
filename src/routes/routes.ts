@@ -3,11 +3,39 @@
 import express from "express";
 import path from "path";
 
-export const router = express.Router()
+const router = express.Router()
 // res.send('ok')
 router.get("/", (req, res) => {
     // res.send('ok')
     res.render("home");
 });
+
+router.get("/login", (req, res) => {
+    res.render("login");
+})
+
+router.post("/login", (req, res) => {
+    //PENDIENTE
+})
+
+router.get("/signin", (req, res) => {
+    res.render("signin");
+})
+
+router.post("/signin", (req, res) => {
+
+})
+
+router.get("/calendar", (req, res) => {
+    res.render("calendar");
+})
+
+router.get("/profile", (req, res) => {
+    res.render("profile");
+})
+
+router.get("/clan", (req, res) => {
+    res.render("clan");
+})
 
 export default router;
