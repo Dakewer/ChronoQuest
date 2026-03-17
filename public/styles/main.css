@@ -1,10 +1,10 @@
 /* Variables del figma */
 :root {
-    --Aventura500: #CF887F;
-    --Aventura700: #7c524c;
-    --BlancoNieve: #fcfcfc;
-    --GrisCarbon: #1f1f1f;
-    --Aventura100: #f5e7e5;
+    --Midnight: #30011E;
+    --DarkTeal: #0B3948;
+    --PacificBlue: #5AB1BB;
+    --BarbiePink: #FA198B;
+    --Wisteria: #BF9ACA;
 }
 
 body {
@@ -16,13 +16,13 @@ body {
 
 /* Navbar estilo RPG */
 .custom-nav {
-    background-color: var(--Aventura500) !important;
+    background-color: var(--Midnight) !important;
     box-shadow: 0 4px 6px rgba(0,0,0,0.1);
 }
 
 /* Barra inferior móvil */
 .bottom-nav {
-    background-color: var(--Aventura500) !important;
+    background-color: var(--Midnight) !important;
     height: 80px;
     border-radius: 20px 20px 0 0;
     padding: 0;
@@ -43,8 +43,8 @@ body {
 }
 
 .nav-item-mobile.active {
-    color: var(--BlancoNieve) !important;
-    background: var(--Aventura100) !important;
+    color: var(--PacificBlue) !important;
+    background: var(--Wisteria) !important;
     border-radius: 12px;
     padding: 5px 10px;
 }
