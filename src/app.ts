@@ -10,7 +10,7 @@ import { connectDB } from "./dataBase/index";
 const port = process.env.PORT || 3000;
 const app = express();
 
-connectDB();
+//connectDB();
 
 // Configuración de handlebars
 app.engine("handlebars", engine());
@@ -28,5 +28,5 @@ app.use("/", routes)
 
 // Muestra el link en la consolo para nomas picarle :)
 app.listen(port, () => {
-    console.log("http://localhost:" + port);
+    console.log(`Aplicación corriendo en http://localhost:${port}`);
 })

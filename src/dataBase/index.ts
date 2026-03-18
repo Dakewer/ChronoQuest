@@ -1,19 +1,15 @@
 "use strict";
 import mongoose from 'mongoose';
 
-// const uri = "mongodb+srv://db_username:<db_password>@chronoquest.sh26edb.mongodb.net/ChronoQuest?retryWrites=true&w=majority&appName=ChronoQuest";
-const uri = "mongodb+srv://Apolo:<Gundam>@chronoquest.sh26edb.mongodb.net/ChronoQuest?retryWrites=true&w=majority&appName=ChronoQuest";;
-
-'mongodb+srv://adminuser:admin123@proyecto.awsmpuw.mongodb.net/test_local?retryWrites=true&w=majority&appName=Proyecto'
+const uri = "mongodb+srv://Apolo:Contraseñas@chronoquest.sh26edb.mongodb.net/ChronoQuest?retryWrites=true&w=majority&appName=ChronoQuest";
 
 export const connectDB = async () => {
     try {
-        // Conectamos usando la variable uri
         await mongoose.connect(uri);
-        // console.log("Base de datos conectada");
+        console.log("Conexión exitosa a MongoDB");
     } catch (error) {
-        console.error('Error al conectar, muerte fatal', error);
-        // Salimos del proceso si hay un error crítico
+        // Es mejor ver el error real que solo decir "muerte fatal" para debuguear
+        console.error('Error crítico al conectar a la base de datos:', error);
         process.exit(1);
     }
 };
