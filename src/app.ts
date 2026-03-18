@@ -5,26 +5,25 @@ import express from "express";
 import path from "path";
 import routes from "./routes/routes";
 import { engine } from "express-handlebars";
-import { connectDB } from "./dataBase/index";
+import { run } from "./dataBase/index";
 
 const port = process.env.PORT || 3000;
 const app = express();
 
-connectDB();
+run().catch(console.dir);
 
 // Configuración de handlebars
 app.engine("handlebars", engine());
 app.set("view engine", "handlebars");
-// app.set("views", "./../views");
-app.set("views", path.join(__dirname, "views"))
+app.set("views", path.join(__dirname, "views"));
 
 // Archivos estáticos
 app.use(express.static(path.join(__dirname, "../public")));
 app.use('/css', express.static(path.join(__dirname, '../node_modules/bootstrap/dist/css')));
-app.use('/js', express.static(path.join(__dirname, '../node_modules/bootstrap/dist/js')))
+app.use('/js', express.static(path.join(__dirname, '../node_modules/bootstrap/dist/js')));
 // no sé si se requiera despues uno de js
 
-app.use("/", routes)
+app.use("/", routes);
 
 // Muestra el link en la consolo para nomas picarle :)
 app.listen(port, () => {

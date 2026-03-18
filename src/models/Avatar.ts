@@ -5,7 +5,7 @@ import mongose from "mogoose";
 const pj = "avatar";
 
 // falta reyenar
-const pjSchema = new mongose.Schema ({
+const Avatar = new mongose.Schema ({
     // elemementos del avatar
     name : {
         type: String,
@@ -14,5 +14,5 @@ const pjSchema = new mongose.Schema ({
 })
 
 // crear colecion
-const avatar = mongose.model("Avatar", pjSchema);
+const avatar = mongose.model("Avatar", Avatar);
 export default avatar;
