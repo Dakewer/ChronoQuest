@@ -1,5 +1,7 @@
 "use strict";
 // index principal, pero no soy fan de llamar a las cosas index
+import { config } from "dotenv" // <-- debe que iniciarse antesde de las rutas
+config();
 
 import express from "express";
 import path from "path";

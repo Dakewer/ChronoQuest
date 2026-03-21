@@ -1,7 +1,7 @@
 "use strict";
+import { config } from "dotenv" // <-- debe que iniciarse antesde de las rutas
+config();
 import mongoose from 'mongoose';
-
-const uri = "mongodb+srv://Apolo:Contraseñas@chronoquest.sh26edb.mongodb.net/ChronoQuest?retryWrites=true&w=majority&appName=ChronoQuest";
 
 export const connectDB = async () => {
     try {
