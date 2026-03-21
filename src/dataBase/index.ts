@@ -5,8 +5,13 @@ import mongoose from 'mongoose';
 
 export const connectDB = async () => {
     try {
+        const uri = process.env.MONGO_URI;
+        if (!uri) {
+            throw new Error("No se encontro la url en el .env");
+        }
+
         await mongoose.connect(uri);
-        console.log("Conexión exitosa a MongoDB");
+        console.log("Se logro Yei");
     } catch (error) {
         // Es mejor ver el error real que solo decir "muerte fatal" para debuguear
         console.error('Error crítico al conectar a la base de datos:', error);
@@ -16,7 +21,7 @@ export const connectDB = async () => {
 
 /*
 const { MongoClient, ServerApiVersion } = require('mongodb');
-const uri = "mongodb+srv://<db_username>:<db_password>@chronoquest.sh26edb.mongodb.net/?appName=ChronoQuest";
+const uri = "mongodb+srv://<db_username>:<db_password>@app.sh26edb.mongodb.net/?appName=app";
 // Create a MongoClient with a MongoClientOptions object to set the Stable API version
 const client = new MongoClient(uri, {
   serverApi: {
