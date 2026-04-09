@@ -1,5 +1,6 @@
-import mongoose, {Schema} from "mongoose";
-import {Hash} from "crypto";
+import mongoose, {
+    Schema
+} from "mongoose";
 
 const usuarioSchema = new Schema({
     name: {
@@ -9,23 +10,21 @@ const usuarioSchema = new Schema({
     mail: {
         type: String,
         required: true,
-        //match: /@/
+        unique: true,
         match: /@/
     },
     birday: {
         type: Date,
         required: true
     },
-    // conmbinacion unica coreo y contraseña
     password: {
-        type: Hash String,
+        type: String,
         required: true
     },
-    foto : {
-        type: file,
+    foto: {
+        type: String,
         required: false,
-        default: true // foto de perfil basica
-        // png o jpg
+        default: "default.png" // carpeta de fotos de public
     },
     descripcion: {
         type: String,
@@ -33,31 +32,30 @@ const usuarioSchema = new Schema({
     }
 });
 
-const users = mongoose.model("users", usuarioSchema);
+export const Users = mongoose.model("Users", usuarioSchema);
 
 // mostrar todo el usuario
-export const getUsers = async () => {
-    return await users.find({});
+export const getUsers = async () => { 
+    return await Users.find({  });
 };
 
-// Mostrar usuario parcial para otras personas, nombre, cumpleaños, coreo y descripcion
-export const getUsersPrivet = async () => {
-    return await users.find({});
+// Mostrar usuario por email
+export const getOneUsers = async (email: string) => { 
+    return await Users.findOne({ mail: email });
 };
 
 // eliminar usuario
-export const deleteUsers = async (email: String) => {
-    return await users.deleteOne({email});
+export const deleteUsers = async (email: string) => { 
+    return await Users.findOneAndDelete({ mail: email });
 };
 
 // Crear y/o actualizar
-// No se puede cambiar el coreo
-export const upCreat4Student = async (usersData: any) => {
-    return await users.findOneAndUpdate(
-        {
-            expedient: studentData.expedient
+// Nota: No se puede cambiar el correo
+export const upCreateUser = async (userData: any) => {
+    return await Users.findOneAndUpdate({
+            mail: userData.mail
         },
-        usersData, {
+        userData, {
             upsert: true,
             new: true
         }

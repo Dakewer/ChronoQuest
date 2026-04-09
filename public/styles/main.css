@@ -34,10 +34,15 @@ body {
     display: flex;
     flex-direction: column;
     align-items: center;
-    color: var(--PacificBlue) !important; ;
+    color: white ;
     text-decoration: none;
     font-size: 0.8rem;
     transition: 0.3s;
+
+    /* Norde */
+    padding: 8px 12px;
+    border: 2px solid transparent;
+    border-radius: 12px;
 }
 
 .nav-item-mobile i {
@@ -46,10 +51,15 @@ body {
 
 /* Falta el fondo del color rosa bajo --Wisteria para diferenciar el activo y el que no esta activo */
 .nav-item-mobile.active {
-    color: var(--PacificBlue) !important;
-    background: rgba(var(--Wisteria), 100%) !important;
+    color: white;
     border-radius: 12px;
     padding: 6px 12px;
+    border: 2px solid white;
+}
+
+/* Efecto visual al presionar */
+.nav-item-mobile:active {
+    transform: scale(0.9);
 }
 
 /* Estilo para escritorio, quitar los espacios inferiores */

@@ -3,6 +3,8 @@ import { config } from "dotenv" // <-- debe que iniciarse antesde de las rutas
 config();
 import mongoose from 'mongoose';
 
+import avatarSchema from './mongodb/usuariorManager';
+
 export const connectDB = async () => {
     try {
         const uri = process.env.MONGO_URI;
@@ -20,27 +22,24 @@ export const connectDB = async () => {
 };
 
 /*
-const { MongoClient, ServerApiVersion } = require('mongodb');
-const uri = "mongodb+srv://<db_username>:<db_password>@app.sh26edb.mongodb.net/?appName=app";
-// Create a MongoClient with a MongoClientOptions object to set the Stable API version
-const client = new MongoClient(uri, {
-  serverApi: {
-    version: ServerApiVersion.v1,
-    strict: true,
-    deprecationErrors: true,
-  }
-});
-async function run() {
-  try {
-    // Connect the client to the server	(optional starting in v4.7)
-    await client.connect();
-    // Send a ping to confirm a successful connection
-    await client.db("admin").command({ ping: 1 });
-    console.log("Pinged your deployment. You successfully connected to MongoDB!");
-  } finally {
-    // Ensures that the client will close when you finish/error
-    await client.close();
-  }
-}
-run().catch(console.dir);
+Flujo
+Elmento para buscar generar el email como digo anmol
+Usuario: loguin -> Crear o iniciar secion
+                -> Ajuste: Cambiar nombre, imagen o descricpion pero no correo (correo)
+                -> Mostrar usuario (id/ email)
+
+Mision:
+        -> Crear mision (id mision)
+        -> Actualizar mision (id mision)
+        -> Eliminar mision (id mision)
+
+        -> Musiones actuales (Id usuario + mision active: true)
+        -> Mision por tag (Id usuario + mision active: true + tag/tags)
+
+Avar:
+        -> Mostrar informacion actual (get one activo true)
+        -> Actualizar wind eate (derota o victoria +1 y recalcular el porcentaje de victoria)
+        -> Mostra estadisticas, sumar estadisticas de la clase + estadisticas eredadas + estadisticas entrenadas
+        -> Actualizar esta disticas (entrenadas) (No se pueden pasar del numero de stad maximas del nivel)
+
  */

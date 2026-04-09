@@ -1,77 +1,109 @@
-import mongoose, {Schema} from "mongoose";
-import {Hash} from "crypto";
+import mongoose, { Schema, Types } from "mongoose";
 
-eenum
-clase
-{
-    // level 1
-    aprendis: 001,
-    // level 1
-    mago: 101
-    espadachin : 002
-    nigromante : 003
+export enum ClaseAvatar {
+    Aprendiz = 1,
+        Mago = 1001,
+        Espadachin = 1002,
+        Nigromante = 1003
 }
 
-// dos tipos de estadisticas, las suyas y las que entrena (eredar)
+// Estructura para los 3 tipos de estadisticas
+const statSchema = {
+    // por clase
+    base: {
+        type: Number,
+        default: 0
+    },
+     // por misiones
+    entrenada: {
+        type: Number,
+        default: 0
+    },
+    // por otro pj
+    heredada: {
+        type: Number,
+        default: 0
+    }
+};
+
 const avatarSchema = new Schema({
-    activo : {
+    name: {
+        type: String,
+        required: true
+    }, // Nombre del bicho,separado del del usuario
+    activo: {
         type: Boolean,
         default: true
     },
     tipo: {
-        type: clase,
+        type: Number,
+        enum: [1, 1001, 1002, 1003],
         required: true
     },
     creacion: {
         type: Date,
+        default: Date.now
+    },
+    fechaFin: {
+        type: Date,
+        default: () => new Date(Date.now() + 30 * 24 * 60 * 60 * 1000)
+    },
+
+    stats: {
+        fuerza: statSchema,
+        velocidad: statSchema,
+        suerte: statSchema,
+        defensa: statSchema,
+        vida: statSchema
+    },
+
+    // Límites de entrenamiento RPG
+    entrenamientop: {
+        type: Number,
+        default: 0
+    },
+    maxEntrenamiento: {
+        type: Number,
+        default: 100
+    },
+
+    perteneceA: {
+        type: Schema.Types.ObjectId,
+        ref: 'Users',
         required: true
-    },
-    ataque : {
-        type : Number,
-        required : true,
-        default: 1
-    },
-    defensa : {
-        type : Number,
-        required : true,
-        default: 1
-    },
-    velocidad : {
-        type : Number,
-        required : true,
-        default: 1
-    },
-    suerte : {
-        type : Number,
-        required : true,
-        default: 1
-    },
-    perteneceA : {
-        type : uuid,
-        required : true,
     }
 });
 
-const avatar = mongoose.model("avatar", avataroSchema);
+export const Avatar = mongoose.model("Avatar", avatarSchema);
 
-// mostrar todo el usuario
-export const getUsers = async () => {
-    return await users.find({});
+export const getAvatar = async (userId: string) => {
+    return await Avatar.findOne({
+        perteneceA: new Types.ObjectId(userId),
+        activo: true
+    });
 };
 
 // actualizar: Subir estadisticas
-export const upAvatar = async (usersData: any) => {
-    return await users.Update(
-        {
-            expedient: studentData.expedient
-        },
-        usersData, {
-            upsert: true,
+export const upAvatar = async (avatarId: string, updateData: any) => {
+    return await Avatar.findByIdAndUpdate(
+        avatarId, {
+            $set: updateData
+        }, {
             new: true
-        }
+        } // Devolver ya actualizado
     );
 };
 
 // revisar que su tiempo de expiracion siga activo
-
-// nombre de usuario
+export const checkAvatar = async (avatarId: string) => {
+    const heroe = await Avatar.findById(avatarId);
+    if (!heroe)
+        return false;
+    if (heroe.fechaFin < new Date()) {
+        heroe.activo = false;
+        await heroe.save();
+        return false;
+        // evoluvionar o matar al heroe
+    }
+    return heroe.activo;
+};
