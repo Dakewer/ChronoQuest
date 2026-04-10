@@ -92,7 +92,7 @@ export const upCreateMision = async (misionData: any) => {
         const anterior = await Mision.findById(misionData._id);
         if (anterior) {
             // Si cambia lo que entrena, reiniciamos racha
-            if (anterior.statAEntrenar !== misionData.statAEntrenar) {
+            if (anterior.statASubir !== misionData.statASubir) {
                 misionData.racha = 0;
             }
         }
