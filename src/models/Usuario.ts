@@ -1,51 +1,35 @@
-"use strict";
+import mongoose, {
+    Schema
+} from "mongoose";
 
-import mongoose from "mongoose";
-const user = "user";
-
-const userSchema = new mongoose.Schema ({
-    name : {
+const usuarioSchema = new Schema({
+    name: {
         type: String,
         required: true
     },
-    email : {
+    mail: {
+        type: String,
+        required: true,
+        unique: true,
+        match: /@/
+    },
+    birday: {
+        type: Date,
+        required: true
+    },
+    password: {
         type: String,
         required: true
     },
-    password : {
+    foto: {
         type: String,
-        required: true
+        required: false,
+        default: "default.png" // carpeta de fotos de public
     },
-    avatar : {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "Avatar"
-    },
-    experience : {
-        type: Number,
-        required: true
+    descripcion: {
+        type: String,
+        required: false
     }
 });
 
-const usuario = mongoose.model("Usuario", userSchema);
-export default usuario;
-
-// CRUD operations
-export const createUser = async (data: any) => {
-    return await usuario.create(data);
-};
-
-export const getUser = async (id: string) => {
-    return await usuario.findById(id);
-};
-
-export const getAllUsers = async () => {
-    return await usuario.find();
-};
-
-export const updateUser = async (id: string, data: any) => {
-    return await usuario.findByIdAndUpdate(id, data, { new: true });
-};
-
-export const deleteUser = async (id: string) => {
-    return await usuario.findByIdAndDelete(id);
-};
+export const Users = mongoose.model("Users", usuarioSchema);
