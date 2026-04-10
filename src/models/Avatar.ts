@@ -1,7 +1,7 @@
 "use strict";
 
 // los elementos del mongo como las estadisticas del pj
-import mongose from "mogoose";
+import mongose from "mongoose";
 const pj = "avatar";
 
 // falta reyenar
