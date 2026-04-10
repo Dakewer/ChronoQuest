@@ -1,47 +1,55 @@
-"use strict";
+import mongoose, { Schema, Types } from "mongoose";
 
-import mongoose from "mongoose";
-const mission = "mission";
+// Enums para mantener consistencia
+enum TipoMision {
+    Habito,
+    Tarea,
+    Evento
+}
+enum Dificultad {
+    muyFacil,
+    Facil,
+    medio,
+    dificil,
+    muyDificil,
+    ThisIsDarkSouls
+}
 
-const missionSchema = new mongoose.Schema ({
-    name : {
+const misionSchema = new Schema({
+    name: {
         type: String,
         required: true
     },
-    description : {
+    tipo: {
+        type: TipoMision,
+        required: true
+    },
+    descripcion: {
+        type: String
+    },
+    asignadaA: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Users',
+        required: true
+    },
+    statASubir: {
         type: String,
         required: true
     },
-    reward : {
+    puntosExp: {
         type: Number,
-        required: true
+        default: 10
     },
-    complition : {
+
+    racha: {
+        type: Number,
+        default: 0
+    },
+    activa: {
         type: Boolean,
-        required: true
-    } 
+        default: true
+    },
+    fechaFin: {
+        type: Date
+    }
 });
-
-const mision = mongoose.model("Mision", missionSchema);
-export default mision;
-
-// CRUD operations
-export const createMission = async (data: any) => {
-    return await mision.create(data);
-};
-
-export const getMission = async (id: string) => {
-    return await mision.findById(id);
-};
-
-export const getAllMissions = async () => {
-    return await mision.find();
-};
-
-export const updateMission = async (id: string, data: any) => {
-    return await mision.findByIdAndUpdate(id, data, { new: true });
-};
-
-export const deleteMission = async (id: string) => {
-    return await mision.findByIdAndDelete(id);
-};
