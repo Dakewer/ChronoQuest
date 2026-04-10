@@ -1,52 +1,79 @@
-"use strict";
+import mongoose, { Schema, Types } from "mongoose";
 
-// los elementos del mongo como las estadisticas del pj
-import mongose from "mongoose";
-const pj = "avatar";
+export enum ClaseAvatar {
+    Aprendiz = 1,
+    Mago = 1001,
+    Espadachin = 1002,
+    Nigromante = 1003
+}
 
-// falta reyenar
-const pjSchema = new mongose.Schema ({
-    // elemementos del avatar
-    name : {
+// Estructura para los 3 tipos de estadisticas
+const statSchema = {
+    // por clase
+    base: {
+        type: Number,
+        default: 0
+    },
+    // por misiones
+    entrenada: {
+        type: Number,
+        default: 0
+    },
+    // por otro pj
+    heredada: {
+        type: Number,
+        default: 0
+    }
+};
+
+const avatarSchema = new Schema({
+    name: {
         type: String,
         required: true
+    }, // Nombre del bicho,separado del del usuario
+    activo: {
+        type: Boolean,
+        default: true
     },
-    level : {
+    tipo: {
         type: Number,
+        enum: [1, 1001, 1002, 1003],
         required: true
     },
-    hp : {
-        type: Number,
-        required: true
+    creacion: {
+        type: Date,
+        default: Date.now
     },
-    attack : {
+    fechaFin: {
+        type: Date,
+        default: () => new Date(Date.now() + 30 * 24 * 60 * 60 * 1000)
+    },
+
+    stats: {
+        fuerza: statSchema,
+        velocidad: statSchema,
+        suerte: statSchema,
+        defensa: statSchema,
+        vida: statSchema
+    },
+
+    // Límites de entrenamiento RPG
+    entrenamientop: {
         type: Number,
+        default: 0
+    },
+    maxEntrenamiento: {
+        type: Number,
+        default: 100
+    },
+
+    perteneceA: {
+        type: Schema.Types.ObjectId,
+        ref: 'Users',
         required: true
     }
-})
+});
 
-// crear colecion
-const avatar = mongose.model("Avatar", pjSchema);
-export default avatar;
+let Avatar = mongoose.model("Avatar", avatarSchema);
 
-//Cruds
-
-export const createAvatar = async (data: any) => {
-    return await avatar.create(data);
-};
-
-export const getAvatar = async (id: string) => {
-    return await avatar.findById(id);
-};
-
-export const getAllAvatars = async () => {
-    return await avatar.find();
-};
-
-export const updateAvatar = async (id: string, data: any) => {
-    return await avatar.findByIdAndUpdate(id, data, { new: true });
-};
-
-export const deleteAvatar = async (id: string) => {
-    return await avatar.findByIdAndDelete(id);
-};
+module.exports = Avatar;
