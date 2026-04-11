@@ -1,12 +1,21 @@
 {
   "compilerOptions": {
-    "target": "esnext", //"target": "ES2022",
-    "module": "nodenext", //,"module": "CommonJS",
+    "target": "ES2022",
+    "module": "commonjs",
+    "lib": ["ES2022"],
     "esModuleInterop": true,
-    "strict": true,
+    "allowSyntheticDefaultImports": true,
+    "strict": false,
+    "noImplicitAny": false,
+    "strictNullChecks": false,
     "outDir": "./dist",
-    "sourceMap": true
+    "sourceMap": true,
+    "rootDir": "./src",
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "resolveJsonModule": true,
+    "moduleResolution": "node"
   },
   "include": ["./src/**/*.ts"],
-  "exclude": ["node_modules", "./src/**/*.spec.ts"]
+  "exclude": ["node_modules", "./src/**/*.spec.ts", "./src/dataBase"]
 }
