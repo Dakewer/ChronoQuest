@@ -3,8 +3,6 @@ import { config } from "dotenv" // <-- debe que iniciarse antesde de las rutas
 config();
 import mongoose from 'mongoose';
 
-import avatarSchema from './mongodb/usuariorManager';
-
 export const connectDB = async () => {
     try {
         const uri = process.env.MONGO_URI;
