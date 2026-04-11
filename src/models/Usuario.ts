@@ -1,6 +1,5 @@
-import mongoose, {
-    Schema
-} from "mongoose";
+// Importaciones
+import mongoose, { Schema } from "mongoose";
 
 const usuarioSchema = new Schema({
     name: {
@@ -24,7 +23,7 @@ const usuarioSchema = new Schema({
     foto: {
         type: String,
         required: false,
-        default: "default.png" // carpeta de fotos de public
+        default: "default.png"
     },
     descripcion: {
         type: String,
@@ -32,4 +31,5 @@ const usuarioSchema = new Schema({
     }
 });
 
-export const Users = mongoose.model("Users", usuarioSchema);
+const Usuario = mongoose.model("Usuario", usuarioSchema);
+export default Usuario;
