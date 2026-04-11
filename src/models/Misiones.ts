@@ -1,12 +1,13 @@
-import mongoose, { Schema, Types } from "mongoose";
+// Imports
+import mongoose, { Schema } from "mongoose";
 
-// Enums para mantener consistencia
-enum TipoMision {
+export enum TipoMision {
     Habito,
     Tarea,
     Evento
 }
-enum Dificultad {
+
+export enum Dificultad {
     muyFacil,
     Facil,
     medio,
@@ -21,7 +22,8 @@ const misionSchema = new Schema({
         required: true
     },
     tipo: {
-        type: TipoMision,
+        type: Number,
+        enum: [0, 1, 2], // Habito=0, Tarea=1, Evento=2
         required: true
     },
     descripcion: {
@@ -40,7 +42,6 @@ const misionSchema = new Schema({
         type: Number,
         default: 10
     },
-
     racha: {
         type: Number,
         default: 0
@@ -53,3 +54,7 @@ const misionSchema = new Schema({
         type: Date
     }
 });
+
+const Mision = mongoose.model('Mision', misionSchema);
+
+export default Mision;
