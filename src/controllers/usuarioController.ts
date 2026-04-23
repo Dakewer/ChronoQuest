@@ -1,6 +1,10 @@
 // Imports
+import { config } from "dotenv"
+config();
+
 import { Request, Response } from 'express';
 import Usuario from '../models/Usuario';
+import jwt from "jsonwebtoken";
 
 // Helper para convertir params a string
 const getStringParam = (param: string | string[] | undefined): string | null => {
@@ -232,3 +236,38 @@ export const upsertUsuario = async (req: Request, res: Response) => {
         });
     }
 };
+
+// Diego esta editando aqui, buajajaja 🔥😈🔥😈🔥😈🔥
+export const login = async (req: Request, res: Response) => {
+    const {email, password} = req.body
+
+    try {
+        const usuario = await Usuario.findOne({ where: email });
+        const usurioJson = usuario?.toJSON();
+
+        if(!usuario) 
+            res.status(404).json({mensaje: "Usuario no encontrado"});
+          
+        // Despues ambiar
+        if(usurioJson?.password !== password)
+            res.status(401).json({mensaje: "Contraseña incorrecta"});
+
+        // Revisar la encriptacion con sevilla
+        /*
+        const validPassword = await BlockedEncryptionTypes$.compare(password, usurioJson?.password);
+        if (validPassword) 
+            res.status(401).json({mensaje: "Contraseña incorrecta"});
+        */
+
+        // cambiar a lo que se quiere que el toquen contenga
+        const token = jwt.sign({ 
+            mail: usurioJson?.mail,
+            name: usurioJson?.name
+        }, process.env.JWT_SECRET, { expiresIn: '24h' });
+
+        res.status(200).json({ token });
+    }
+    catch (error: any) {
+      res.status(500).json({mensaje: "Todo cambió cuando te vi, uh, uh, uh. De blanco y negro a color me convertí"});
+    }
+}
