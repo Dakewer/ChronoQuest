@@ -238,6 +238,7 @@ export const upsertUsuario = async (req: Request, res: Response) => {
 };
 
 // Diego esta editando aqui, buajajaja 🔥😈🔥😈🔥😈🔥
+// Login de usuario
 export const login = async (req: Request, res: Response) => {
     const {email, password} = req.body
 
@@ -245,9 +246,9 @@ export const login = async (req: Request, res: Response) => {
         const usuario = await Usuario.findOne({ where: email });
         const usurioJson = usuario?.toJSON();
 
-        if(!usuario) 
+        if(!usuario)
             res.status(404).json({mensaje: "Usuario no encontrado"});
-          
+
         // Despues ambiar
         if(usurioJson?.password !== password)
             res.status(401).json({mensaje: "Contraseña incorrecta"});
@@ -255,12 +256,12 @@ export const login = async (req: Request, res: Response) => {
         // Revisar la encriptacion con sevilla
         /*
         const validPassword = await BlockedEncryptionTypes$.compare(password, usurioJson?.password);
-        if (validPassword) 
+        if (validPassword)
             res.status(401).json({mensaje: "Contraseña incorrecta"});
         */
 
         // cambiar a lo que se quiere que el toquen contenga
-        const token = jwt.sign({ 
+        const token = jwt.sign({
             mail: usurioJson?.mail,
             name: usurioJson?.name
         }, process.env.JWT_SECRET, { expiresIn: '24h' });
@@ -268,6 +269,45 @@ export const login = async (req: Request, res: Response) => {
         res.status(200).json({ token });
     }
     catch (error: any) {
-      res.status(500).json({mensaje: "Todo cambió cuando te vi, uh, uh, uh. De blanco y negro a color me convertí"});
+        res.status(500).json({mensaje: "Todo cambió cuando te vi, uh, uh, uh. De blanco y negro a color me convertí"});
     }
 }
+
+export function loginFrom(req: Request, res: Response ) {
+    const uri = path.join(__dirname,'../views/login.html');
+    res.sendFile(uri);
+}
+
+export function googleAuth(req: Request, res: Response) {
+    res.redirect("/dashboard");
+}
+
+middlewares(){
+        this.app.use(cors());
+        this.app.use(express.json());
+        this.app.use(express.static('public'));
+        this.app.use('/uploads', express.static(path.join(__dirname, 'uploads')));  // esto es para subir imagenes. lo puse por si algo. pero el plan sigue siendo las imagenes predefinidas
+        
+        this.app.use((err:any, req:express.Request, res:express.Response, next:express.NextFunction)=>{
+            
+            if(err instanceof multer.MulterError){
+
+                res.status(400).json({
+                    error:err.message,
+                });
+
+            }else if(err){
+
+                res.status(500).json({
+                    error:err.message,
+                });
+
+            }else{
+                next();
+            }
+
+
+        })
+
+
+    }

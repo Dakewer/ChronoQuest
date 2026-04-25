@@ -1,5 +1,6 @@
 "use strict";
 // index principal, pero no soy fan de llamar a las cosas index
+// https://drive.google.com/file/d/1aPqWYVzZX_wMz16qbB_6m0hJSwdfTSUy/view
 import { config } from "dotenv" // <-- debe que iniciarse antesde de las rutas
 config();
 

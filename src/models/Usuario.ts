@@ -1,5 +1,6 @@
 // Importaciones
 import mongoose, { Schema } from "mongoose";
+import multer from "multer";
 
 const usuarioSchema = new Schema({
     name: {
@@ -26,6 +27,11 @@ const usuarioSchema = new Schema({
         default: "default.png"
     },
     descripcion: {
+        type: String,
+        required: false
+    },
+    // golge id
+    googleID: {
         type: String,
         required: false
     }
