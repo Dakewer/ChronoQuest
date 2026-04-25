@@ -1,6 +1,6 @@
 // Imports
 import { Request, Response } from 'express';
-import Usuario from '../models/Usuario';
+import User from '../models/user';
 
 // Helper para convertir params a string
 const getStringParam = (param: string | string[] | undefined): string | null => {
@@ -11,7 +11,7 @@ const getStringParam = (param: string | string[] | undefined): string | null => 
 // Mostrar todos los usuarios
 export const getUsuarios = async (req: Request, res: Response) => {
     try {
-        const usuarios = await Usuario.find({});
+        const usuarios = await User.find({});
 
         res.status(200).json({
             success: true,
@@ -39,7 +39,7 @@ export const getUsuarioByEmail = async (req: Request, res: Response) => {
             });
         }
 
-        const usuario = await Usuario.findOne({ mail: email });
+        const usuario = await User.findOne({ mail: email });
 
         if (!usuario) {
             return res.status(404).json({
@@ -75,7 +75,7 @@ export const getUsuarioById = async (req: Request, res: Response) => {
             });
         }
 
-        const usuario = await Usuario.findById(idStr);
+        const usuario = await User.findById(idStr);
 
         if (!usuario) {
             return res.status(404).json({
@@ -110,7 +110,7 @@ export const deleteUsuarioByEmail = async (req: Request, res: Response) => {
             });
         }
 
-        const usuario = await Usuario.findOneAndDelete({ mail: email });
+        const usuario = await User.findOneAndDelete({ mail: email });
 
         if (!usuario) {
             return res.status(404).json({
@@ -147,7 +147,7 @@ export const deleteUsuarioById = async (req: Request, res: Response) => {
             });
         }
 
-        const usuario = await Usuario.findByIdAndDelete(idStr);
+        const usuario = await User.findByIdAndDelete(idStr);
 
         if (!usuario) {
             return res.status(404).json({
@@ -177,7 +177,7 @@ export const upsertUsuario = async (req: Request, res: Response) => {
         const userData = req.body;
 
         // Validar datos requeridos
-        if (!userData.name || !userData.mail || !userData.birday || !userData.password) {
+        if (!userData.name || !userData.email || !userData.birday || !userData.password) {
             return res.status(400).json({
                 success: false,
                 message: 'Faltan campos requeridos: name, mail, birday, password'
@@ -185,7 +185,7 @@ export const upsertUsuario = async (req: Request, res: Response) => {
         }
 
         // Validar formato de email
-        if (!userData.mail.includes('@')) {
+        if (!userData.email.includes('@')) {
             return res.status(400).json({
                 success: false,
                 message: 'El email debe contener @'
@@ -194,8 +194,8 @@ export const upsertUsuario = async (req: Request, res: Response) => {
 
         // No se puede cambiar el correo
         if (userData._id) {
-            const usuarioExistente = await Usuario.findById(userData._id);
-            if (usuarioExistente && usuarioExistente.mail !== userData.mail) {
+            const usuarioExistente = await User.findById(userData._id);
+            if (usuarioExistente && usuarioExistente.email !== userData.email) {
                 return res.status(400).json({
                     success: false,
                     message: 'No se puede cambiar el email del usuario'
@@ -203,8 +203,8 @@ export const upsertUsuario = async (req: Request, res: Response) => {
             }
         }
 
-        const usuario = await Usuario.findOneAndUpdate(
-            { mail: userData.mail },
+        const usuario = await User.findOneAndUpdate(
+            { mail: userData.email },
             userData,
             { upsert: true, new: true }
         );
