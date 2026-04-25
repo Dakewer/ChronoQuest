@@ -5,6 +5,7 @@ config();
 import { Request, Response } from 'express';
 import Usuario from '../models/Usuario';
 import jwt from "jsonwebtoken";
+import path from "path/win32";
 
 // Helper para convertir params a string
 const getStringParam = (param: string | string[] | undefined): string | null => {
@@ -243,15 +244,15 @@ export const login = async (req: Request, res: Response) => {
     const {email, password} = req.body
 
     try {
-        const usuario = await Usuario.findOne({ where: email });
+        const usuario = await Usuario.findOne({ mail: email });
         const usurioJson = usuario?.toJSON();
 
         if(!usuario)
-            res.status(404).json({mensaje: "Usuario no encontrado"});
+            return res.status(404).json({mensaje: "Usuario no encontrado"});
 
         // Despues ambiar
         if(usurioJson?.password !== password)
-            res.status(401).json({mensaje: "Contraseña incorrecta"});
+            return res.status(401).json({mensaje: "Contraseña incorrecta"});
 
         // Revisar la encriptacion con sevilla
         /*
@@ -262,6 +263,8 @@ export const login = async (req: Request, res: Response) => {
 
         // cambiar a lo que se quiere que el toquen contenga
         const token = jwt.sign({
+            id: usuario._id.toString(),
+            email: usurioJson?.mail,
             mail: usurioJson?.mail,
             name: usurioJson?.name
         }, process.env.JWT_SECRET, { expiresIn: '24h' });
@@ -282,32 +285,32 @@ export function googleAuth(req: Request, res: Response) {
     res.redirect("/dashboard");
 }
 
+// verificar imagenes, mover y terminar en mi middlewar
+/*
 middlewares(){
-        this.app.use(cors());
-        this.app.use(express.json());
-        this.app.use(express.static('public'));
-        this.app.use('/uploads', express.static(path.join(__dirname, 'uploads')));  // esto es para subir imagenes. lo puse por si algo. pero el plan sigue siendo las imagenes predefinidas
+    this.app.use(cors());
+    this.app.use(express.json());
+    this.app.use(express.static('public'));
+    this.app.use('/uploads', express.static(path.join(__dirname, 'uploads')));  // esto es para subir imagenes. lo puse por si algo. pero el plan sigue siendo las imagenes predefinidas
+    
+    this.app.use((err:any, req:express.Request, res:express.Response, next:express.NextFunction)=>{
         
-        this.app.use((err:any, req:express.Request, res:express.Response, next:express.NextFunction)=>{
-            
-            if(err instanceof multer.MulterError){
+        if(err instanceof multer.MulterError){
 
-                res.status(400).json({
-                    error:err.message,
-                });
+            res.status(400).json({
+                error:err.message,
+            });
 
-            }else if(err){
+        }
+        else if(err){
 
-                res.status(500).json({
-                    error:err.message,
-                });
+            res.status(500).json({
+                error:err.message,
+            });
 
-            }else{
-                next();
-            }
-
-
-        })
-
-
-    }
+        }
+        else
+            next();
+    })
+}
+*/

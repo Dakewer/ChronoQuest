@@ -8,7 +8,7 @@ import express from "express";
 import path from "path";
 import routes from "./routes/routes";
 import { engine } from "express-handlebars";
-import { connectDB } from "./dataBase/index";
+import { connectDB } from "./dataBase/mongodb";
 
 const port = process.env.PORT || 3005;
 const app = express();

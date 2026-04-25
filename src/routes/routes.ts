@@ -26,12 +26,7 @@ router.get("/login", (req, res) => {
     res.render("login", { layout: "salmon" });
 })
 
-router.post("/login", (req, res) => {
-    //PENDIENTE
-})
-
-// Lo nuevo, rutas protegidas con token
-router.post("/login", asyncHandler(login));
+router.post("/login", login);
 
 router.get("/signin", (req, res) => {
     //res.render("signin");

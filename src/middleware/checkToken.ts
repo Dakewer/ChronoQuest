@@ -11,15 +11,19 @@ export const checkToken = async (req: Request, res: Response, next: NextFunction
         return res.status(401).json({ mensaje: "No veo toquen, maldito pobre." });
 
     try {
-        const decoded = jwt.verify(token, process.env.JWT_SECRET) as JwtPayload & { id: number; email: string };
-        req.Usuario = {
-            id: decoded.id,
-            email: decoded.email,
-            nombre: null
-        };
-        next();     
-    } 
-    
+        const secret = process.env.JWT_SECRET;
+        if (!secret) 
+            return res.status(500).json({ mensaje: "No se puede aceder al .env." });
+
+        const decoded = jwt.verify(token, secret) as JwtPayload & { id?: string; email?: string; name?: string };
+                req.Usuario = {
+                    id: decoded.id ,
+                    email: decoded.email,
+                    nombre: decoded.name
+                };
+                next();     
+            } 
+            
     catch (error) {
         return res.status(401).json({ mensaje: "Token inválido." });
     }

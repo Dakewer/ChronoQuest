@@ -1,9 +1,8 @@
 //import { ClaseAvatar } from "./../../dataBase/mongodb/avatarManager";
-import { ClaseAvatar } from "./dataBase/mongodb/avatarManager";
 
 let ruta = "./public/images/clases/";
 let claseActual = "Knight"; // despues converir en funcion para que lo encuentre
-ruta += ruta + claseActual;
+ruta += claseActual;
 
 // mapeado
 const config = {
@@ -26,7 +25,8 @@ spriteSheet.src = ruta;
 
 let inicio  = 0;
 let actual: ReturnType<typeof setInterval> | null = null;
-let default: AnimationName = "idle";
+let defaultAnimation: AnimationName = "idle";
+let frameIndex = 0;
 
 // pintar personaje y animación
 // idel es infinit ta hasta que exista otra interacion
@@ -36,16 +36,16 @@ const paintAvatar = (animacion: string = "idle") => {
   if (actual) 
     clearInterval(actual);
 
-    default  = animacion;
-    default = 0;
-    const animcion = config.animations[animacion];
+    defaultAnimation = animacion as AnimationName;
+    frameIndex = 0;
+    const animcion = config.animations[animacion as AnimationName];
 
     const draw = () => {
-    tipo.clearRect(0, 0, canvas.width, canvas.height);
+    tipo.clearRect(0, 0, sprite.width, sprite.height);
     tipo.drawImage(
       spriteSheet,
-      inicio * config.frameWidth,  // x en el sprite sheet
-      animacion.row    * config.frameHeight,  // y en el sprite sheet
+      frameIndex * config.frameWidth,  // x en el sprite sheet
+      animcion.row    * config.frameHeight,  // y en el sprite sheet
       config.frameWidth,
       config.frameHeight,
       0, 0,                              // donde dibujarlo en el canvas
@@ -53,21 +53,21 @@ const paintAvatar = (animacion: string = "idle") => {
       config.frameHeight
     );
 
-    inicio++;
+    frameIndex++;
 
     // Si no es idle, parar al terminar los frames
-    if (animacion !== "idle" && default >= animacion.frameCount) {
+    if (animacion !== "idle" && frameIndex >= animcion.frameCount) {
       clearInterval(actual!);
       paintAvatar("idle"); // volver a idle
     } 
     else 
-      default = default % animacion.frameCount; // loop para idle
+       frameIndex = frameIndex % animcion.frameCount; // loop para idle
   };
 
   spriteSheet.onload = () => draw(); // por si aún no cargó
   if (spriteSheet.complete) draw();  // si ya estaba cargada
 
-  actual = setInterval(draw, 1000 / anim.fps);
+  actual = setInterval(draw, 1000 / animcion.fps);
 };
 
 function clickAvatar() {
@@ -77,4 +77,4 @@ function clickAvatar() {
 sprite.addEventListener("click", clickAvatar);
 
 // iniciar en idle
-spriteSheet.onload = () => paintAvatar("idle");
+paintAvatar("idle");
