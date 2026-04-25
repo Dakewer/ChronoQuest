@@ -37,8 +37,8 @@ export default usuarioSchema;
 export const Users = mongoose.model("Users", usuarioSchema);
 
 // mostrar todo el usuario
-export const getUsers = async () => { 
-    return await Users.find({  });
+export const getUsers = async (userID: string) => { 
+    return await Users.findById(userID);
 };
 
 // Mostrar usuario por email

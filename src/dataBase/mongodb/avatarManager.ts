@@ -4,9 +4,9 @@ import { deserialize } from "v8";
 
 export enum ClaseAvatar {
     Aprendiz = 1,
-        Mago = 1001,
-        Espadachin = 1002,
-        Nigromante = 1003
+    Mago = 1001,
+    Espadachin = 1002,
+    Nigromante = 1003
 }
 
 // Estructura para los 3 tipos de estadisticas

@@ -14,14 +14,6 @@ const statSChema = {
     base: {
         type: Number,
         default: 0
-    },
-    entrenada: {
-        type: Number,
-        default: 0
-    },
-    heredada: {
-        type: Number,
-        default: 0
     }
 }; 
 

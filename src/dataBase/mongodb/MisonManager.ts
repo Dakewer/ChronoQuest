@@ -51,6 +51,10 @@ const misionSchema = new Schema({
     },
     fechaFin: {
         type: Date
+    },
+    dificultad: {
+        type: Dificultad,
+        default: Dificultad.medio
     }
 });
 
