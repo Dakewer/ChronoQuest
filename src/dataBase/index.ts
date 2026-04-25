@@ -13,7 +13,7 @@ export const connectDB = async () => {
         }
 
         await mongoose.connect(uri);
-        console.log("Se logro Yei");
+        //console.log("Se logro Yei");
     } catch (error) {
         // Es mejor ver el error real que solo decir "muerte fatal" para debuguear
         console.error('Error crítico al conectar a la base de datos:', error);
