@@ -1,6 +1,4 @@
 import mongoose, { Schema, Types } from "mongoose";
-import { features } from "process";
-import { deserialize } from "v8";
 
 export enum ClaseAvatar {
     Aprendiz = 1,

@@ -51,11 +51,10 @@ const avatarSchema = new Schema({
     },
 
     stats: {
+        vida: statSchema,
         fuerza: statSchema,
-        velocidad: statSchema,
-        suerte: statSchema,
-        defensa: statSchema,
-        vida: statSchema
+        destreza: statSchema,
+        constitucion: statSchema,
     },
 
     // Límites de entrenamiento RPG
