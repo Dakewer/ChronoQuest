@@ -1,79 +1,32 @@
-import mongoose, { Schema, Types } from "mongoose";
+// Imports
+import mongoose, { Schema } from "mongoose";
+import {UUID} from "mongodb";
 
-export enum ClaseAvatar {
-    Aprendiz = 1,
-    Mago = 1001,
-    Espadachin = 1002,
-    Nigromante = 1003
-}
-
-// Estructura para los 3 tipos de estadisticas
-const statSchema = {
-    // por clase
-    base: {
-        type: Number,
-        default: 0
-    },
-    // por misiones
-    entrenada: {
-        type: Number,
-        default: 0
-    },
-    // por otro pj
-    heredada: {
-        type: Number,
-        default: 0
-    }
-};
-
+// Schema
 const avatarSchema = new Schema({
-    name: {
+    class: {
         type: String,
         required: true
-    }, // Nombre del bicho,separado del del usuario
-    activo: {
-        type: Boolean,
-        default: true
     },
-    tipo: {
+    strength: {
         type: Number,
-        enum: [1, 1001, 1002, 1003],
         required: true
     },
-    creacion: {
-        type: Date,
-        default: Date.now
-    },
-    fechaFin: {
-        type: Date,
-        default: () => new Date(Date.now() + 30 * 24 * 60 * 60 * 1000)
-    },
-
-    stats: {
-        fuerza: statSchema,
-        velocidad: statSchema,
-        suerte: statSchema,
-        defensa: statSchema,
-        vida: statSchema
-    },
-
-    // Límites de entrenamiento RPG
-    entrenamientop: {
+    dexterity: {
         type: Number,
-        default: 0
+        required: true
     },
-    maxEntrenamiento: {
+    constitution: {
         type: Number,
-        default: 100
+        required: true
     },
-
-    perteneceA: {
-        type: Schema.Types.ObjectId,
-        ref: 'Users',
+    victory_rate: {
+        type: Number,
         required: true
     }
-});
+})
 
-const Avatar = mongoose.model('Avatar', avatarSchema);
 
+// Exports
+const Avatar = mongoose.model("Avatar", avatarSchema);
 export default Avatar;

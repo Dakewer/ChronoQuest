@@ -22,6 +22,8 @@ export const upload = multer({
         if (mimetype && extname)
             return cb(null, true);
 
-        cb(new Error("Solo se permiten archivos JPEG, JPG y PNG"), false);
+        // cb(new Error("Solo se permiten archivos JPEG, JPG y PNG"), false);
+        // cb(null, false);
+        cb(new Error("Solo se permiten archivos JPEG, JPG y PNG") as any, false);
     }
 });
