@@ -6,6 +6,7 @@ export enum ClaseAvatar {
     Espadachin = 1002,
     Nigromante = 1003
 }
+const pj = "avatar";
 
 // Estructura para los 3 tipos de estadisticas
 const statSchema = {

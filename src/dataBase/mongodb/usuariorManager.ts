@@ -32,6 +32,8 @@ const usuarioSchema = new Schema({
     }
 });
 
+export default usuarioSchema;
+
 export const Users = mongoose.model("Users", usuarioSchema);
 
 // mostrar todo el usuario

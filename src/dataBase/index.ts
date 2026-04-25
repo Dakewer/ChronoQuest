@@ -3,7 +3,7 @@ import { config } from "dotenv" // <-- debe que iniciarse antesde de las rutas
 config();
 import mongoose from 'mongoose';
 
-import avatarSchema from './mongodb/usuariorManager';
+import usuarioSchema from './mongodb/usuariorManager';
 
 export const connectDB = async () => {
     try {
