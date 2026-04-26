@@ -1,5 +1,6 @@
 // Imports
 import mongoose, { Schema } from "mongoose";
+import multer from "multer";
 import {UUID} from "mongodb";
 
 // Schema
@@ -30,6 +31,15 @@ const userSchema = new Schema({
     avatar: {
         type: UUID,
         required: false,
+    },
+    descripcion: {
+        type: String,
+        required: false
+    },
+    // golge id
+    googleID: {
+        type: String,
+        required: false
     }
 });
 

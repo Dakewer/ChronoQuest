@@ -3,9 +3,19 @@
 import express from "express";
 import path from "path";
 
+import { login } from "../controllers/usuarioController";
+import { checkToken } from "../middleware/checkToken";
+
 const router = express.Router()
-// res.send('ok')
+/*
 router.get("/", (req, res) => {
+    // res.send('ok')
+    res.render("home");
+});
+*/
+
+// cambiar a las que deben que estar cerradas, ejemplo 
+router.get("/", checkToken, (req, res) => {
     // res.send('ok')
     res.render("home");
 });
@@ -16,9 +26,7 @@ router.get("/login", (req, res) => {
     res.render("login", { layout: "salmon" });
 })
 
-router.post("/login", (req, res) => {
-    //PENDIENTE
-})
+router.post("/login", login);
 
 router.get("/signin", (req, res) => {
     //res.render("signin");
