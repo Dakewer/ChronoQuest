@@ -1,32 +1,34 @@
 // Imports
 import mongoose, { Schema } from "mongoose";
-import {UUID} from "mongodb";
 
 // Schema
-const avatarSchema = new Schema({
-    class: {
+const habitSchema = new Schema({
+    name: {
         type: String,
         required: true
     },
-    strength: {
+    description: {
+        type: String,
+        required: false
+    },
+    difficulty: {
         type: Number,
         required: true
     },
-    dexterity: {
+    streak: {
         type: Number,
         required: true
     },
-    constitution: {
-        type: Number,
+    release_date: {
+        type: Array,
         required: true
     },
-    victory_rate: {
-        type: Number,
+    hour: {
+        type: Date,
         required: true
     }
 })
 
-
 // Exports
-const Avatar = mongoose.model("Avatar", avatarSchema);
-export default Avatar;
+const Habit = mongoose.model("Habit", habitSchema);
+export default Habit;

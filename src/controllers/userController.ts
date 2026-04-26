@@ -1,6 +1,6 @@
 // Imports
 import { Request, Response } from 'express';
-import Usuario from '../models/Usuario';
+import User from '../models/user';
 
 // Helper para convertir params a string
 const getStringParam = (param: string | string[] | undefined): string | null => {
@@ -8,27 +8,27 @@ const getStringParam = (param: string | string[] | undefined): string | null => 
     return Array.isArray(param) ? param[0] : param;
 };
 
-// Mostrar todos los usuarios
-export const getUsuarios = async (req: Request, res: Response) => {
+// Mostrar todos los users
+export const getUsers = async (req: Request, res: Response) => {
     try {
-        const usuarios = await Usuario.find({});
+        const users = await User.find({});
 
         res.status(200).json({
             success: true,
-            data: usuarios
+            data: users
         });
     } catch (error: any) {
-        console.error('Error en getUsuarios:', error);
+        console.error('Error en getUsers:', error);
         res.status(500).json({
             success: false,
-            message: 'Error al obtener los usuarios',
+            message: 'Error al obtener los users',
             error: error?.message || 'Error desconocido'
         });
     }
 };
 
 // Mostrar usuario por email
-export const getUsuarioByEmail = async (req: Request, res: Response) => {
+export const getUserByEmail = async (req: Request, res: Response) => {
     try {
         const { email } = req.params;
 
@@ -39,12 +39,12 @@ export const getUsuarioByEmail = async (req: Request, res: Response) => {
             });
         }
 
-        const usuario = await Usuario.findOne({ mail: email });
+        const usuario = await User.findOne({ email: email });
 
         if (!usuario) {
             return res.status(404).json({
                 success: false,
-                message: 'Usuario no encontrado'
+                message: 'User no encontrado'
             });
         }
 
@@ -53,7 +53,7 @@ export const getUsuarioByEmail = async (req: Request, res: Response) => {
             data: usuario
         });
     } catch (error: any) {
-        console.error('Error en getUsuarioByEmail:', error);
+        console.error('Error en getUserByEmail:', error);
         res.status(500).json({
             success: false,
             message: 'Error al obtener el usuario',
@@ -63,7 +63,7 @@ export const getUsuarioByEmail = async (req: Request, res: Response) => {
 };
 
 // Mostrar usuario por ID
-export const getUsuarioById = async (req: Request, res: Response) => {
+export const getUserById = async (req: Request, res: Response) => {
     try {
         const { id } = req.params;
         const idStr = getStringParam(id);
@@ -75,18 +75,18 @@ export const getUsuarioById = async (req: Request, res: Response) => {
             });
         }
 
-        const usuario = await Usuario.findById(idStr);
+        const user = await User.findById(idStr);
 
-        if (!usuario) {
+        if (!user) {
             return res.status(404).json({
                 success: false,
-                message: 'Usuario no encontrado'
+                message: 'User no encontrado'
             });
         }
 
         res.status(200).json({
             success: true,
-            data: usuario
+            data: user
         });
     } catch (error: any) {
         console.error('Error en getUsuarioById:', error);
@@ -99,7 +99,7 @@ export const getUsuarioById = async (req: Request, res: Response) => {
 };
 
 // Eliminar usuario por email
-export const deleteUsuarioByEmail = async (req: Request, res: Response) => {
+export const deleteUserByEmail = async (req: Request, res: Response) => {
     try {
         const { email } = req.params;
 
@@ -110,22 +110,22 @@ export const deleteUsuarioByEmail = async (req: Request, res: Response) => {
             });
         }
 
-        const usuario = await Usuario.findOneAndDelete({ mail: email });
+        const user = await User.findOneAndDelete({ email: email });
 
-        if (!usuario) {
+        if (!user) {
             return res.status(404).json({
                 success: false,
-                message: 'Usuario no encontrado'
+                message: 'User no encontrado'
             });
         }
 
         res.status(200).json({
             success: true,
-            message: 'Usuario eliminado correctamente',
-            data: usuario
+            message: 'User eliminado correctamente',
+            data: user
         });
     } catch (error: any) {
-        console.error('Error en deleteUsuarioByEmail:', error);
+        console.error('Error en deleteUserByEmail:', error);
         res.status(500).json({
             success: false,
             message: 'Error al eliminar el usuario',
@@ -135,7 +135,7 @@ export const deleteUsuarioByEmail = async (req: Request, res: Response) => {
 };
 
 // Eliminar usuario por ID
-export const deleteUsuarioById = async (req: Request, res: Response) => {
+export const deleteUserById = async (req: Request, res: Response) => {
     try {
         const { id } = req.params;
         const idStr = getStringParam(id);
@@ -147,18 +147,18 @@ export const deleteUsuarioById = async (req: Request, res: Response) => {
             });
         }
 
-        const usuario = await Usuario.findByIdAndDelete(idStr);
+        const usuario = await User.findByIdAndDelete(idStr);
 
         if (!usuario) {
             return res.status(404).json({
                 success: false,
-                message: 'Usuario no encontrado'
+                message: 'User no encontrado'
             });
         }
 
         res.status(200).json({
             success: true,
-            message: 'Usuario eliminado correctamente',
+            message: 'User eliminado correctamente',
             data: usuario
         });
     } catch (error: any) {
@@ -172,20 +172,20 @@ export const deleteUsuarioById = async (req: Request, res: Response) => {
 };
 
 // Crear o actualizar usuario (upsert)
-export const upsertUsuario = async (req: Request, res: Response) => {
+export const updateUser = async (req: Request, res: Response) => {
     try {
         const userData = req.body;
 
         // Validar datos requeridos
-        if (!userData.name || !userData.mail || !userData.birday || !userData.password) {
+        if (!userData.name || !userData.email || !userData.creation_date || !userData.password) {
             return res.status(400).json({
                 success: false,
-                message: 'Faltan campos requeridos: name, mail, birday, password'
+                message: 'Faltan campos requeridos: name, email, creation_date, password'
             });
         }
 
         // Validar formato de email
-        if (!userData.mail.includes('@')) {
+        if (!userData.email.includes('@')) {
             return res.status(400).json({
                 success: false,
                 message: 'El email debe contener @'
@@ -194,8 +194,8 @@ export const upsertUsuario = async (req: Request, res: Response) => {
 
         // No se puede cambiar el correo
         if (userData._id) {
-            const usuarioExistente = await Usuario.findById(userData._id);
-            if (usuarioExistente && usuarioExistente.mail !== userData.mail) {
+            const usuarioExistente = await User.findById(userData._id);
+            if (usuarioExistente && usuarioExistente.email !== userData.mail) {
                 return res.status(400).json({
                     success: false,
                     message: 'No se puede cambiar el email del usuario'
@@ -203,15 +203,15 @@ export const upsertUsuario = async (req: Request, res: Response) => {
             }
         }
 
-        const usuario = await Usuario.findOneAndUpdate(
-            { mail: userData.mail },
+        const usuario = await User.findOneAndUpdate(
+            { email: userData.email },
             userData,
             { upsert: true, new: true }
         );
 
         res.status(200).json({
             success: true,
-            message: userData._id ? 'Usuario actualizado' : 'Usuario creado',
+            message: userData._id ? 'User actualizado' : 'User creado',
             data: usuario
         });
     } catch (error: any) {

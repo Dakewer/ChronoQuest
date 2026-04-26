@@ -1,35 +1,38 @@
-// Importaciones
+// Imports
 import mongoose, { Schema } from "mongoose";
+import {UUID} from "mongodb";
 
-const usuarioSchema = new Schema({
+// Schema
+const userSchema = new Schema({
     name: {
         type: String,
         required: true
     },
-    mail: {
+    email: {
         type: String,
         required: true,
         unique: true,
         match: /@/
     },
-    birday: {
-        type: Date,
-        required: true
-    },
     password: {
         type: String,
         required: true
     },
-    foto: {
+    creation_date: {
+        type: Date,
+        required: true
+    },
+    photo: {
         type: String,
         required: false,
         default: "default.png"
     },
-    descripcion: {
-        type: String,
-        required: false
+    avatar: {
+        type: UUID,
+        required: false,
     }
 });
 
-const Usuario = mongoose.model("Usuario", usuarioSchema);
-export default Usuario;
+// Exports
+const User = mongoose.model("User", userSchema);
+export default User;
