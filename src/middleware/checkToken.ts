@@ -23,7 +23,8 @@ export const checkToken = async (req: Request, res: Response, next: NextFunction
    let token = req.header("Authorization")?.replace("Bearer ", "");
 
     if (!token)
-        return res.status(401).json({ mensaje: "No veo toquen, maldito pobre." });
+        return res.redirect("/login");
+
     try {
         const secret = process.env.JWT_SECRET;
         if (!secret) 
@@ -38,6 +39,6 @@ export const checkToken = async (req: Request, res: Response, next: NextFunction
         next();     
     } 
     catch (error) {
-        return res.status(401).json({ mensaje: "Token inválido." });
+        return res.redirect("/login");
     }
 }

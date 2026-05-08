@@ -51,7 +51,8 @@ body {
 
 /* Falta el fondo del color rosa bajo --Wisteria para diferenciar el activo y el que no esta activo */
 .nav-item-mobile.active {
-    color: white;
+    background-color: var(--Wisteria);
+    color: var(--Midnight) !important;
     border-radius: 12px;
     padding: 6px 12px;
     border: 2px solid white;

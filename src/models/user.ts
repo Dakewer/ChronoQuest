@@ -1,6 +1,5 @@
 // Imports
 import mongoose, { Schema } from "mongoose";
-import multer from "multer";
 import {UUID} from "mongodb";
 
 // Schema
