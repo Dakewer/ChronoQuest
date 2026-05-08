@@ -4,7 +4,6 @@ config();
 
 import { Request, Response } from 'express';
 import User from '../models/user';
-import Usuario from '../models/Usuario';
 import jwt from "jsonwebtoken";
 import path from "path/win32";
 
@@ -245,7 +244,7 @@ export const login = async (req: Request, res: Response) => {
     const {email, password} = req.body
 
     try {
-        const usuario = await Usuario.findOne({ mail: email });
+        const usuario = await User.findOne({ email: email });
         const usurioJson = usuario?.toJSON();
 
         if(!usuario)
@@ -265,8 +264,8 @@ export const login = async (req: Request, res: Response) => {
         // cambiar a lo que se quiere que el toquen contenga
         const token = jwt.sign({
             id: usuario._id.toString(),
-            email: usurioJson?.mail,
-            mail: usurioJson?.mail,
+            email: usurioJson?.email,
+            mail: usurioJson?.email,
             name: usurioJson?.name
         }, process.env.JWT_SECRET, { expiresIn: '24h' });
 
@@ -285,33 +284,3 @@ export function loginFrom(req: Request, res: Response ) {
 export function googleAuth(req: Request, res: Response) {
     res.redirect("/dashboard");
 }
-
-// verificar imagenes, mover y terminar en mi middlewar
-/*
-middlewares(){
-    this.app.use(cors());
-    this.app.use(express.json());
-    this.app.use(express.static('public'));
-    this.app.use('/uploads', express.static(path.join(__dirname, 'uploads')));  // esto es para subir imagenes. lo puse por si algo. pero el plan sigue siendo las imagenes predefinidas
-
-    this.app.use((err:any, req:express.Request, res:express.Response, next:express.NextFunction)=>{
-
-        if(err instanceof multer.MulterError){
-
-            res.status(400).json({
-                error:err.message,
-            });
-
-        }
-        else if(err){
-
-            res.status(500).json({
-                error:err.message,
-            });
-
-        }
-        else
-            next();
-    })
-}
-*/

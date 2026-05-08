@@ -4,7 +4,7 @@ import express from "express";
 import path from "path";
 
 import { login } from "../controllers/usuarioController";
-import { checkToken } from "../middleware/checkToken";
+import { autentificar } from "../middleware/auth";
 
 const router = express.Router()
 /*
@@ -15,7 +15,7 @@ router.get("/", (req, res) => {
 */
 
 // cambiar a las que deben que estar cerradas, ejemplo 
-router.get("/", checkToken, (req, res) => {
+router.get("/", autentificar, (req, res) => {
     // res.send('ok')
     res.render("home");
 });
