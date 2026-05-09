@@ -1,11 +1,10 @@
 "use strict";
 
 import express from "express";
-import { login } from "../controllers/userController";
+import passport from "passport";
 import { checkToken } from "../middleware/checkToken";
 import User, { IUser } from "../models/user";
 import jwt from "jsonwebtoken";
-import user from "../models/user";
  
 const router = express.Router();
 /*
@@ -49,14 +48,11 @@ router.post("/login", async (req, res) => {
             process.env.JWT_SECRET!,
             { expiresIn: "24h" }
         );
- 
-        // Autorixar
-        res.setHeader("Authorization", `Bearer ${token}`);
 
         // guardarlo en cookie y redirigir
-        res.cookie("token", token, { httpOnly: true, maxAge: 24 * 60 * 60 * 1000 }); // 1 dia
+        res.cookie("token", token, { httpOnly: true, maxAge: 24 * 60 * 60 * 1000 });
         res.redirect("/");
- 
+
     } catch (error) {
         console.error("Error en POST /login:", error);
         res.status(500).render("login", { layout: "remain", error: "Error en el servidor" });
@@ -98,6 +94,24 @@ router.post("/signin", async (req, res) => {
         res.status(500).render("signin", { layout: "remain", error: "Error interno del servidor" });
     }
 });
+
+router.get("/auth/google",
+    passport.authenticate("google", { scope: ["profile", "email"] })
+);
+
+router.get("/auth/google/confirm",
+    passport.authenticate("google", { failureRedirect: "/login", session: false }),
+    (req, res) => {
+        const user = req.user as IUser;
+        const token = jwt.sign(
+            { id: user._id.toString(), email: user.email, name: user.name },
+            process.env.JWT_SECRET!,
+            { expiresIn: "24h" }
+        );
+        res.cookie("token", token, { httpOnly: true, maxAge: 24 * 60 * 60 * 1000 });
+        res.redirect("/");
+    }
+);
 
 // Rutas bloqueadas 
 // cambiar a las que deben que estar cerradas, ejemplo 

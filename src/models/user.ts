@@ -68,7 +68,7 @@ userSchema.method("setPassword", async function(this: IUser, password: string): 
 
 userSchema.method("validatePassword", async function(this: IUser, unhashed: string): Promise<boolean> {
     // puede ser falso por google
-    if (!this.password) 
+    if (!this.password)
         return false;
     return bcrypt.compare(unhashed, this.password);
 });

@@ -5,9 +5,8 @@ config();
 import { Request, Response } from 'express';
 import User from '../models/user';
 import jwt from "jsonwebtoken";
-import path from "path/win32";
+import path from "path";
 
-// Helper para convertir params a string
 const getStringParam = (param: string | string[] | undefined): string | null => {
     if (!param) return null;
     return Array.isArray(param) ? param[0] : param;
@@ -200,7 +199,7 @@ export const updateUser = async (req: Request, res: Response) => {
         // No se puede cambiar el correo
         if (userData._id) {
             const usuarioExistente = await User.findById(userData._id);
-            if (usuarioExistente && usuarioExistente.email !== userData.mail) {
+            if (usuarioExistente && usuarioExistente.email !== userData.email) {
                 return res.status(400).json({
                     success: false,
                     message: 'No se puede cambiar el email del usuario'
@@ -208,11 +207,26 @@ export const updateUser = async (req: Request, res: Response) => {
             }
         }
 
-        const usuario = await User.findOneAndUpdate(
-            { email: userData.email },
-            userData,
-            { upsert: true, new: true }
-        );
+        let usuario = await User.findOne({ email: userData.email });
+        if (!usuario) {
+            usuario = new User({
+                name: userData.name,
+                email: userData.email,
+                creation_date: userData.creation_date,
+                photo: userData.photo,
+                descripcion: userData.descripcion,
+                googleID: userData.googleID
+            });
+        } else {
+            usuario.name = userData.name;
+            usuario.creation_date = userData.creation_date;
+            usuario.photo = userData.photo || usuario.photo;
+            usuario.descripcion = userData.descripcion || usuario.descripcion;
+        }
+
+        if (userData.password)
+            await usuario.setPassword(userData.password);
+        await usuario.save();
 
         res.status(200).json({
             success: true,
@@ -245,28 +259,22 @@ export const login = async (req: Request, res: Response) => {
 
     try {
         const usuario = await User.findOne({ email: email });
-        const usurioJson = usuario?.toJSON();
 
         if(!usuario)
             return res.status(404).json({mensaje: "Usuario no encontrado"});
 
-        // Despues ambiar
-        if(usurioJson?.password !== password)
+        if (!usuario.password)
+            return res.status(403).json({mensaje: "Esta cuenta usa Google para iniciar sesión"});
+
+        const isValidPassword = await usuario.validatePassword(password);
+        if(!isValidPassword)
             return res.status(401).json({mensaje: "Contraseña incorrecta"});
 
-        // Revisar la encriptacion con sevilla
-        /*
-        const validPassword = await BlockedEncryptionTypes$.compare(password, usurioJson?.password);
-        if (validPassword)
-            res.status(401).json({mensaje: "Contraseña incorrecta"});
-        */
-
-        // cambiar a lo que se quiere que el toquen contenga
+        // cambiar a lo que se quiere que el token contenga
         const token = jwt.sign({
             id: usuario._id.toString(),
-            email: usurioJson?.email,
-            mail: usurioJson?.email,
-            name: usurioJson?.name
+            email: usuario.email,
+            name: usuario.name
         }, process.env.JWT_SECRET, { expiresIn: '24h' });
 
         res.status(200).json({ token });

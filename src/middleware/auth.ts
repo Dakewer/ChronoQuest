@@ -1,8 +1,8 @@
 import passport from "passport";
 import { Strategy as GoogleStrategy } from "passport-google-oauth20";
-import { Application, Request, Response, NextFunction } from "express";
-import jwt, { JwtPayload } from "jsonwebtoken";
+import { Application } from "express";
 import { config } from "dotenv";
+import User from "../models/user";
 
 config();
 
@@ -11,9 +11,27 @@ export function googleAuthMiddlware(app: Application) {
         clientID: process.env.GOOGLE_CLIENT_ID || "",
         clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
         callbackURL: "/auth/google/confirm",
-    }, (accessToken, refreshToken, profile, cb) => {
-        cb(null, profile);
-    });
+    }, async (accessToken, refreshToken, profile, cb) => {
+    try {
+        // Buscar si ya existe el googleID
+        let user = await User.findOne({ googleID: profile.id });
 
+        // creear usuario
+        if (!user) {
+            user = new User({
+                name: profile.displayName,
+                email: profile.emails?.[0].value,
+                googleID: profile.id,
+                photo: profile.photos?.[0].value,
+                creation_date: new Date()
+            });
+            await user.save();
+        }
+
+        cb(null, user);
+    } catch (error) {
+        cb(error);
+    }
+    });
     passport.use(googleStrategy);
 }

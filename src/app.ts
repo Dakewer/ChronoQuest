@@ -9,6 +9,9 @@ import path from "path";
 import routes from "./routes/routes";
 import { engine } from "express-handlebars";
 import { connectDB } from "./dataBase/mongodb";
+import passport from "passport";
+import { googleAuthMiddlware } from "./middleware/auth";
+import cookieParser from "cookie-parser";
 
 const port = process.env.PORT || 3005;
 const app = express();
@@ -26,6 +29,13 @@ app.use(express.static(path.join(__dirname, "../public")));
 app.use('/css', express.static(path.join(__dirname, '../node_modules/bootstrap/dist/css')));
 app.use('/js', express.static(path.join(__dirname, '../node_modules/bootstrap/dist/js')))
 // no sé si se requiera despues uno de js
+
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+app.use(cookieParser());
+
+googleAuthMiddlware(app);
+app.use(passport.initialize());
 
 app.use("/", routes)
 
