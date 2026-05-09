@@ -23,8 +23,7 @@ const enemigoSchema = new Schema({
         required: true
     },
     tipo: {
-        type: Number,
-        enum: [1, 1001, 1002, 1003],
+        type: ClaseEnemigo,
         required: true
     },
     stats: {
