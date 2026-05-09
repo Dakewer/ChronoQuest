@@ -20,7 +20,7 @@ router.get("/", (req, res) => {
 router.get("/login", (req, res) => {
     //res.render("login");
     // res.render("login", { layout: false });
-    res.render("login", { layout: "remain" });
+    res.render("login", { layout: "remain", audio: "CT.mp3" });
 })
 
 router.post("/login", async (req, res) => {
@@ -62,7 +62,7 @@ router.post("/login", async (req, res) => {
 // registrar
 router.get("/signin", (req, res) => {
     //res.render("signin");
-    res.render("signin", { layout: "remain" });
+    res.render("signin", { layout: "remain" , audio: "CT.mp3"});
 })
 
 // esta fea por que es la misma llamada para el login normal y el de google
@@ -117,31 +117,31 @@ router.get("/auth/google/confirm",
 // cambiar a las que deben que estar cerradas, ejemplo 
 router.get("/", checkToken, (req, res) => {
     // res.send('ok')
-    res.render("home");
+    res.render("home", { audio: "DQ.mp3" });
 });
 
 router.get("/calendar", checkToken, (req, res) => {
-    res.render("calendar");
+    res.render("calendar", { audio: "DQ.mp3" });
 })
 
 router.get("/profile",checkToken, (req, res) => {
-    res.render("profile");
+    res.render("profile", { audio: "KQ.mp3" });
 })
 
 router.get("/clan", checkToken, (req, res) => {
-    res.render("clan");
+    res.render("clan", { audio: "KQ.mp3" });
 })
 
 router.get("/add", checkToken, (req, res) => {
-    res.render("add");
+    res.render("add", { audio: "DQ.mp3" });
 })
 
 router.get("/todo", checkToken, (req, res) => {
-    res.render("todo");
+    res.render("todo", { audio: "DQ.mp3" });
 })
 
 router.get("/settings", checkToken, (req, res) => {
-    res.render("settings");
+    res.render("settings", { audio: "NC.mp3" });
 })
 
 export default router;
