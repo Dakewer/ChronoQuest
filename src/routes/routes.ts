@@ -1,12 +1,13 @@
 "use strict";
 
 import express from "express";
-import path from "path";
-
 import { login } from "../controllers/userController";
 import { checkToken } from "../middleware/checkToken";
-
-const router = express.Router()
+import User, { IUser } from "../models/user";
+import jwt from "jsonwebtoken";
+import user from "../models/user";
+ 
+const router = express.Router();
 /*
 router.get("/", (req, res) => {
     // res.send('ok')
@@ -14,28 +15,96 @@ router.get("/", (req, res) => {
 });
 */
 
-// cambiar a las que deben que estar cerradas, ejemplo 
-router.get("/", checkToken, (req, res) => {
-    // res.send('ok')
-    res.render("home");
-});
+// rutas tipo free
 
+// ingresar
 router.get("/login", (req, res) => {
     //res.render("login");
     // res.render("login", { layout: false });
     res.render("login", { layout: "remain" });
 })
 
-router.post("/login", checkToken);
+router.post("/login", async (req, res) => {
+    const { email, password } = req.body;
+ 
+    if (!email || !password)
+        return res.status(400).render("login", { layout: "remain", error: "Email y contraseña son requeridos" });
+ 
+    try {
+        const user = await User.findOne({ email }) as IUser | null;
+ 
+        if (!user)
+            return res.status(404).render("login", { layout: "remain", error: "Usuario no encontrado" });
+ 
+        if (!user.password)
+            return res.status(403).render("login", { layout: "remain", error: "Esta cuenta usa Google para iniciar sesión"});
+ 
+        const valid = await user.validatePassword(password);
+ 
+        if (!valid)
+            return res.status(401).render("login", { layout: "remain", error: "Contraseña incorrecta" });
+ 
+        const token = jwt.sign(
+            { id: user._id.toString(), email: user.email, name: user.name },
+            process.env.JWT_SECRET!,
+            { expiresIn: "24h" }
+        );
+ 
+        // Autorixar
+        res.setHeader("Authorization", `Bearer ${token}`);
 
+        // guardarlo en cookie y redirigir
+        res.cookie("token", token, { httpOnly: true, maxAge: 24 * 60 * 60 * 1000 }); // 1 dia
+        res.redirect("/");
+ 
+    } catch (error) {
+        console.error("Error en POST /login:", error);
+        res.status(500).render("login", { layout: "remain", error: "Error en el servidor" });
+    }
+});
+
+// registrar
 router.get("/signin", (req, res) => {
     //res.render("signin");
     res.render("signin", { layout: "remain" });
 })
 
-router.post("/signin", (req, res) => {
+// esta fea por que es la misma llamada para el login normal y el de google
+router.post("/signin", async (req, res) => {
+    const { username, email, password } = req.body;
+ 
+    if (!username || !email || !password)
+        return res.status(400).render("signin", {layout: "remain", error: "Todos los campos son requeridos" });
+ 
+    try {
+        const existing = await User.findOne({ email });
+ 
+        if (existing)
+            return res.status(409).render("signin", { layout: "remain", error: "El email ya está registrado" });
+ 
+        const newUser = new User({
+            name: username,
+            email,
+            creation_date: new Date()
+        }) as unknown as IUser;
+ 
+        // encripatar
+        await newUser.setPassword(password);
+        await newUser.save();
+        res.redirect("/login");
+ 
+    } catch (error) {
+        console.error("Error en POST /signin:", error);
+        res.status(500).render("signin", { layout: "remain", error: "Error interno del servidor" });
+    }
+});
 
-})
+// Rutas bloqueadas 
+// cambiar a las que deben que estar cerradas, ejemplo 
+router.get("/", checkToken, (req, res) => {
+    // res.send('ok')
+    res.render("home");
+});
 
 router.get("/calendar", checkToken, (req, res) => {
     res.render("calendar");
