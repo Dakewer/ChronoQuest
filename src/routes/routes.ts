@@ -1,11 +1,29 @@
-"use strict";
-
+// Imports
 import express from "express";
 import path from "path";
 
+//Routes
+import { login } from "../controllers/usuarioController";
+import { checkToken } from "../middleware/checkToken";
+import habits from "./habitsRoutes";
+import tasks from "./tasksRoutes";
+
 const router = express.Router()
+
+/*
 // res.send('ok')
 router.get("/", (req, res) => {
+    // res.send('ok')
+    res.render("home");
+});
+*/
+
+// External Routes
+router.use('/habits', habits);
+router.use('/tasks', tasks);
+
+// cambiar a las que deben que estar cerradas, ejemplo
+router.get("/", checkToken, (req, res) => {
     // res.send('ok')
     res.render("home");
 });
