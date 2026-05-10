@@ -59,6 +59,13 @@
 <!-- Aqui se pinta la info -->
 <main class="container py-4">
     {{{body}}}
+
+    {{#if audio}}
+        <audio id="bg-music" loop>
+            <source src="/music/{{audio}}" type="audio/mpeg">
+        </audio>
+    {{/if}}
+
 </main>
 <!-- Barra inferior -->
 <nav class="navbar fixed-bottom d-md-none border-top bottom-nav">
@@ -104,6 +111,11 @@
 
 <!-- Bostrap -->
 <script src="/js/bootstrap.bundle.min.js"></script>
+<script>
+    document.addEventListener('click', () => {
+        document.getElementById('bg-music').play();
+    }, { once: true });
+</script>
 </body>
 </html>
 <!-- Nota para despues los iconos rellenos es para cuando estas en la paguina

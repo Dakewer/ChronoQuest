@@ -26,7 +26,12 @@ const habitSchema = new Schema({
     hour: {
         type: Date,
         required: true
-    }
+    },
+    asignadaA: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Users',
+        required: true
+    },
 })
 
 // Exports
