@@ -11,11 +11,11 @@ import tasks from "./tasksRoutes";
 const router = express.Router()
 
 /*
-// res.send('ok')
-router.get("/", (req, res) => {
-    // res.send('ok')
-    res.render("home");
-});
+* / res.send('ok')
+* router.get("/", (req, res) => {
+*    // res.send('ok')
+*    res.render("home");
+* });
 */
 
 // External Routes
