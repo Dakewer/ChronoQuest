@@ -4,6 +4,11 @@ import {UUID} from "mongodb";
 
 // Schema
 const avatarSchema = new Schema({
+    belongsTo: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Users',
+        required: true
+    },
     class: {
         type: String,
         required: true
@@ -22,6 +27,14 @@ const avatarSchema = new Schema({
     },
     victory_rate: {
         type: Number,
+        required: true
+    },
+    activo: {
+        type: Boolean,
+        default: true
+    },
+    fechaFin: {
+        type: Date,
         required: true
     }
 })
