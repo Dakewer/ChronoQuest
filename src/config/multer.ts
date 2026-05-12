@@ -27,3 +27,33 @@ export const upload = multer({
         cb(new Error("Solo se permiten archivos JPEG, JPG y PNG") as any, false);
     }
 });
+
+// verificar imagenes, mover y terminar en mi middlewar
+/*
+middlewares(){
+    this.app.use(cors());
+    this.app.use(express.json());
+    this.app.use(express.static('public'));
+    this.app.use('/uploads', express.static(path.join(__dirname, 'uploads')));  // esto es para subir imagenes. lo puse por si algo. pero el plan sigue siendo las imagenes predefinidas
+
+    this.app.use((err:any, req:express.Request, res:express.Response, next:express.NextFunction)=>{
+
+        if(err instanceof multer.MulterError){
+
+            res.status(400).json({
+                error:err.message,
+            });
+
+        }
+        else if(err){
+
+            res.status(500).json({
+                error:err.message,
+            });
+
+        }
+        else
+            next();
+    })
+}
+*/

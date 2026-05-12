@@ -73,6 +73,30 @@ export const createUser = async (req: Request, res: Response) => {
     }
 };
 
+// Crear usuario pero para el login
+/*
+export const createUser2 = async (req: Request, res: Response, name: string, email: string, password: string) => {
+    try {
+        if (!name || !email || !password)
+            return res.status(400).render("signin", { layout: "remain", error: "Todos los campos son requeridos" });
+
+        const existing = await User.findOne({ email });
+        if (existing)
+            return res.status(409).render("signin", { layout: "remain", error: "El email ya está registrado" });
+
+        const newUser = new User({ name, email, creation_date: new Date() });
+        await newUser.setPassword(password);
+        await newUser.save();
+
+        res.redirect("/login");
+
+    } catch (error) {
+        console.error("Error en createUser2:", error);
+        res.status(500).render("signin", { layout: "remain", error: "Error interno del servidor" });
+    }
+};
+*/
+
 // Mostrar todos los users
 export const getUsers = async (req: Request, res: Response) => {
     try {

@@ -5,6 +5,7 @@ import passport from "passport";
 import { checkToken } from "../middleware/checkToken";
 import User, { IUser } from "../models/user";
 import jwt from "jsonwebtoken";
+import { googleAuthMiddlware } from "../middleware/auth";
  
 const router = express.Router();
 /*
@@ -65,18 +66,50 @@ router.get("/signin", (req, res) => {
     res.render("signin", { layout: "remain" , audio: "CT.mp3"});
 })
 
-// esta fea por que es la misma llamada para el login normal y el de google
+// registrarse con el boton de registrarse
+/*
+router.post("/signin", async (req, res) => {
+    const { name, email, password } = req.body;
+    await createUser2(req, res, name, email, password);
+});
+*/
+// los errorres en postman son send, para el navegador es render 
+router.post("/signin", async (req, res) => {
+    const { name, email, password } = req.body;
+
+    if (!name || !email || !password)
+        return res.status(400).render("signin", { layout: "remain", error: "Todos los campos son requeridos" });
+
+    try {
+        // Verificar si ya existe
+        const existing = await User.findOne({ email });
+        if (existing)
+            return res.status(409).render("signin", { layout: "remain", error: "El email ya está registrado" });
+
+        const newUser = new User({ name, email, creation_date: new Date() });
+        await newUser.setPassword(password);
+        await newUser.save();
+
+        res.redirect("/login");
+    } catch (error) {
+        console.error("Error en POST /signin:", error);
+        res.status(500).render("signin", { layout: "remain", error: "Error interno del servidor" });
+    }
+});
+/*
 router.post("/signin", async (req, res) => {
     const { username, email, password } = req.body;
  
     if (!username || !email || !password)
-        return res.status(400).render("signin", {layout: "remain", error: "Todos los campos son requeridos" });
+        return res.status(400).send("Todos los campos son requeridos" );
+        //res.send("faltan campos");
  
     try {
         const existing = await User.findOne({ email });
  
         if (existing)
-            return res.status(409).render("signin", { layout: "remain", error: "El email ya está registrado" });
+            return res.status(409).send("El email ya está registrado" );
+            //res.send("ya existen")
  
         const newUser = new User({
             name: username,
@@ -91,8 +124,19 @@ router.post("/signin", async (req, res) => {
  
     } catch (error) {
         console.error("Error en POST /signin:", error);
-        res.status(500).render("signin", { layout: "remain", error: "Error interno del servidor" });
+        res.status(500).render( "Error interno del servidor" );
     }
+});
+*/
+
+// registrarse con el boton de google
+router.get("/signin/google", googleAuthMiddlware, async (req, res) => {
+    const { email } = req.body;
+    // crear/obtener datos de google y despues jweb token y redirigir
+    const existing = await User.findOne({ email });
+    if (existing)
+        return res.status(409).send("El email ya está registrado" );
+        //res.send("ya existen")
 });
 
 router.get("/auth/google",

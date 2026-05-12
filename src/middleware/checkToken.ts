@@ -2,8 +2,10 @@ import { config } from "dotenv"
 config();
 import {Request, Response, NextFunction} from "express";
 import jwt, {JwtPayload} from "jsonwebtoken"
+// import IUSer from
 // import { Usuario } from "../models/express";
 
+// creo que esta puedo exportar directamente la de interfas que hice en usuer
 declare global {
     namespace Express {
         interface Request {

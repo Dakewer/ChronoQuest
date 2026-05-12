@@ -20,7 +20,7 @@ export interface IUser extends Document {
 }
 
 // Schema
-const userSchema = new Schema({
+const userSchema = new Schema<IUser>({
     name: {
         type: String,
         required: true
@@ -53,7 +53,8 @@ const userSchema = new Schema({
     },
     descripcion: {
         type: String,
-        required: false
+        required: false,
+        default: "usando corono quest"
     },
     // golge id
     googleID: {
@@ -74,5 +75,5 @@ userSchema.method("validatePassword", async function(this: IUser, unhashed: stri
 });
 
 // Exports
-const User = mongoose.model("User", userSchema);
+const User = mongoose.model<IUser>("User", userSchema);
 export default User;
