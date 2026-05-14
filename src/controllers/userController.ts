@@ -1,6 +1,12 @@
 // Imports
+import { config } from "dotenv"
+config();
+
 import { Request, Response } from 'express';
 import User from '../models/user';
+import Usuario from '../models/Usuario';
+import jwt from "jsonwebtoken";
+import path from "path/win32";
 
 // Helper para convertir params a string
 const getStringParam = (param: string | string[] | undefined): string | null => {
@@ -232,3 +238,80 @@ export const updateUser = async (req: Request, res: Response) => {
         });
     }
 };
+
+// Diego esta editando aqui, buajajaja 🔥😈🔥😈🔥😈🔥
+// Login de usuario
+export const login = async (req: Request, res: Response) => {
+    const {email, password} = req.body
+
+    try {
+        const usuario = await Usuario.findOne({ mail: email });
+        const usurioJson = usuario?.toJSON();
+
+        if(!usuario)
+            return res.status(404).json({mensaje: "Usuario no encontrado"});
+
+        // Despues ambiar
+        if(usurioJson?.password !== password)
+            return res.status(401).json({mensaje: "Contraseña incorrecta"});
+
+        // Revisar la encriptacion con sevilla
+        /*
+        const validPassword = await BlockedEncryptionTypes$.compare(password, usurioJson?.password);
+        if (validPassword)
+            res.status(401).json({mensaje: "Contraseña incorrecta"});
+        */
+
+        // cambiar a lo que se quiere que el toquen contenga
+        const token = jwt.sign({
+            id: usuario._id.toString(),
+            email: usurioJson?.mail,
+            mail: usurioJson?.mail,
+            name: usurioJson?.name
+        }, process.env.JWT_SECRET, { expiresIn: '24h' });
+
+        res.status(200).json({ token });
+    }
+    catch (error: any) {
+        res.status(500).json({mensaje: "Todo cambió cuando te vi, uh, uh, uh. De blanco y negro a color me convertí"});
+    }
+}
+
+export function loginFrom(req: Request, res: Response ) {
+    const uri = path.join(__dirname,'../views/login.html');
+    res.sendFile(uri);
+}
+
+export function googleAuth(req: Request, res: Response) {
+    res.redirect("/dashboard");
+}
+
+// verificar imagenes, mover y terminar en mi middlewar
+/*
+middlewares(){
+    this.app.use(cors());
+    this.app.use(express.json());
+    this.app.use(express.static('public'));
+    this.app.use('/uploads', express.static(path.join(__dirname, 'uploads')));  // esto es para subir imagenes. lo puse por si algo. pero el plan sigue siendo las imagenes predefinidas
+
+    this.app.use((err:any, req:express.Request, res:express.Response, next:express.NextFunction)=>{
+
+        if(err instanceof multer.MulterError){
+
+            res.status(400).json({
+                error:err.message,
+            });
+
+        }
+        else if(err){
+
+            res.status(500).json({
+                error:err.message,
+            });
+
+        }
+        else
+            next();
+    })
+}
+*/

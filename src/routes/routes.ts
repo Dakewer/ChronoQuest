@@ -8,6 +8,9 @@ import { checkToken } from "../middleware/checkToken";
 import habits from "./habitsRoutes";
 import tasks from "./tasksRoutes";
 
+import { login } from "../controllers/usuarioController";
+import { checkToken } from "../middleware/checkToken";
+
 const router = express.Router()
 
 /*
@@ -24,6 +27,15 @@ router.use('/tasks', tasks);
 
 // cambiar a las que deben que estar cerradas, ejemplo
 router.get("/", checkToken, (req, res) => {
+/*
+router.get("/", (req, res) => {
+    // res.send('ok')
+    res.render("home");
+});
+*/
+
+// cambiar a las que deben que estar cerradas, ejemplo
+router.get("/", checkToken, (req, res) => {
     // res.send('ok')
     res.render("home");
 });
@@ -34,9 +46,7 @@ router.get("/login", (req, res) => {
     res.render("login", { layout: "salmon" });
 })
 
-router.post("/login", (req, res) => {
-    //PENDIENTE
-})
+router.post("/login", login);
 
 router.get("/signin", (req, res) => {
     //res.render("signin");

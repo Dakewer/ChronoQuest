@@ -1,5 +1,6 @@
 "use strict";
 // index principal, pero no soy fan de llamar a las cosas index
+// https://drive.google.com/file/d/1aPqWYVzZX_wMz16qbB_6m0hJSwdfTSUy/view
 import { config } from "dotenv" // <-- debe que iniciarse antesde de las rutas
 config();
 
@@ -7,7 +8,7 @@ import express from "express";
 import path from "path";
 import routes from "./routes/routes";
 import { engine } from "express-handlebars";
-import { connectDB } from "./dataBase/index";
+import { connectDB } from "./dataBase/mongodb";
 
 const port = process.env.PORT || 3005;
 const app = express();
