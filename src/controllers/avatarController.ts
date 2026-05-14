@@ -3,6 +3,19 @@ import { Request, Response } from 'express';
 import mongoose, { Types } from 'mongoose';
 import Avatar from '../models/Avatar';
 
+// Crear nuevo avatar
+export const createAvatar = async (req: Request, res: Response) => {
+    try {
+        const avatarData = req.body;
+        const newAvatar = new Avatar(avatarData);
+        await newAvatar.save();
+
+        res.status(201).json(newAvatar);
+    } catch (error : any) {
+        res.status(500).json({ error: error.message });
+    }
+};
+
 // Obtener avatar activo de un usuario
 export const getAvatar = async (req: Request, res: Response) => {
     try {
