@@ -3,12 +3,25 @@ import { Request, Response } from 'express';
 import mongoose, { Types } from 'mongoose';
 import Avatar from '../models/Avatar';
 
+// Crear nuevo avatar
+export const createAvatar = async (req: Request, res: Response) => {
+    try {
+        const avatarData = req.body;
+        const newAvatar = new Avatar(avatarData);
+        await newAvatar.save();
+
+        res.status(201).json(newAvatar);
+    } catch (error : any) {
+        res.status(500).json({ error: error.message });
+    }
+};
+
 // Obtener avatar activo de un usuario
-export const getAvatar = async (req: Request, res: Response) => {
+export const getAvatar = async (req: Request<{ userId: string }>, res: Response) => {
     try {
         const { userId } = req.params;
         const avatar = await Avatar.findOne({
-            perteneceA: new Types.ObjectId(userId),
+            belongsTo: new Types.ObjectId(userId),
             activo: true
         });
 
@@ -17,7 +30,7 @@ export const getAvatar = async (req: Request, res: Response) => {
         }
 
         res.status(200).json(avatar);
-    } catch (error) {
+    } catch (error : any) {
         res.status(500).json({ error: error.message });
     }
 };
@@ -39,7 +52,7 @@ export const updateAvatar = async (req: Request, res: Response) => {
         }
 
         res.status(200).json(avatar);
-    } catch (error) {
+    } catch (error : any) {
         res.status(500).json({ error: error.message });
     }
 };
@@ -66,20 +79,7 @@ export const checkAvatarStatus = async (req: Request, res: Response) => {
             active: isActive,
             message: isActive ? 'Avatar activo' : 'Avatar expirado o inactivo'
         });
-    } catch (error) {
-        res.status(500).json({ error: error.message });
-    }
-};
-
-// Crear nuevo avatar
-export const createAvatar = async (req: Request, res: Response) => {
-    try {
-        const avatarData = req.body;
-        const newAvatar = new Avatar(avatarData);
-        await newAvatar.save();
-
-        res.status(201).json(newAvatar);
-    } catch (error) {
+    } catch (error : any) {
         res.status(500).json({ error: error.message });
     }
 };
@@ -99,7 +99,7 @@ export const deleteAvatar = async (req: Request, res: Response) => {
         }
 
         res.status(200).json({ message: 'Avatar desactivado correctamente', avatar });
-    } catch (error) {
+    } catch (error : any) {
         res.status(500).json({ error: error.message });
     }
 };

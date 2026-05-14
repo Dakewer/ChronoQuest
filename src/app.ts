@@ -37,6 +37,8 @@ app.use(cookieParser());
 googleAuthMiddlware(app);
 app.use(passport.initialize());
 
+app.use(express.static(path.join(__dirname, "public")));
+
 app.use("/", routes)
 
 // Muestra el link en la consolo para nomas picarle :)
