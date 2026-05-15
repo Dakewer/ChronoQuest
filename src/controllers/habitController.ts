@@ -1,6 +1,7 @@
 // Imports
 import { Request, Response } from "express";
 import Habit from '../models/habit';
+import { broadcastClanUpdate } from "../core/soket";
 
 
 // Functions
@@ -122,6 +123,9 @@ async function completeHabit(req: Request, res: Response) {
         habit.streak = (habit.streak || 0) + 1;
         habit.completada = true;
         await habit.save();
+
+        const username = req.Usuario?.nombre || req.Usuario?.email || "Héroe";
+        broadcastClanUpdate({ username, missionName: habit.name });
 
         res.status(200).json({ ok: true, habit });
     } 

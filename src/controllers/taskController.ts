@@ -1,6 +1,7 @@
 // Imports
 import { Request, Response } from "express";
 import Task from '../models/task';
+import { broadcastClanUpdate } from "../core/soket";
 
 // Functions
 async function createTask(req: Request, res: Response) {
@@ -113,6 +114,9 @@ async function completeTask(req: Request, res: Response) {
 
         if (!task)
             return res.status(404).json({ "Error": "Task not found" });
+
+        const username = req.Usuario?.nombre || req.Usuario?.email || "Héroe";
+        broadcastClanUpdate({ username, missionName: task.name });
 
         res.status(200).json({ ok: true, task });
     } 

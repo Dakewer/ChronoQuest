@@ -4,6 +4,8 @@ import express from "express";
 import passport from "passport";
 import { checkToken } from "../middleware/checkToken";
 import User, { IUser } from "../models/user";
+import Task from "../models/task";
+import Habit from "../models/habit";
 import jwt from "jsonwebtoken";
 import { googleAuthMiddlware } from "../middleware/auth";
 //import { MUSIC_URLS } from "../config/s3";
@@ -155,7 +157,25 @@ router.get("/add", checkToken, async (req, res) => {
 
 router.get("/todo", checkToken, async (req, res) => {
     const music = await getMusicURLs();
-    res.render("todo", { audio: music.DQ });
+
+    const userId = req.Usuario?.id;
+    const tasks = userId
+        ? await Task.find({ asignadaA: userId, completada: false }).lean()
+        : [];
+    const habits = userId
+        ? await Habit.find({ asignadaA: userId, completada: false }).lean()
+        : [];
+
+    const tasksForView = tasks.map((task) => ({
+        ...task,
+        end_date: task.end_date ? new Date(task.end_date).toLocaleDateString("es-ES") : "",
+    }));
+    const habitsForView = habits.map((habit) => ({
+        ...habit,
+        release_date: Array.isArray(habit.release_date) ? habit.release_date.join(', ') : habit.release_date || '',
+    }));
+
+    res.render("todo", { audio: music.DQ, tasks: tasksForView, habits: habitsForView });
 });
 
 router.get("/settings", checkToken, async (req, res) => {

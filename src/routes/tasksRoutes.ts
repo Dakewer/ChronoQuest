@@ -157,6 +157,7 @@ router.post("/upload", upload.single("file"), async (req, res) => {
  *         description: Token no proporcionado o inválido
  */
 router.post("/", checkToken, createTask);
+router.post("/add", checkToken, createTask);
 
 /**
  * @swagger

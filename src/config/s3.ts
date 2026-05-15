@@ -12,7 +12,7 @@ export const s3 = new S3Client({
 const BUCKET = process.env.AWS_BUCKET_NAME!;
 
 async function getPresignedUrl(key: string): Promise<string> {
-    return getSignedUrl(s3, new GetObjectCommand({ Bucket: BUCKET, Key: key }), { expiresIn: 3600 });
+    return getSignedUrl(s3 as any, new GetObjectCommand({ Bucket: BUCKET, Key: key }), { expiresIn: 3600 });
 }
 
 export async function getMusicURLs() {

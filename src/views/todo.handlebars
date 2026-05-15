@@ -1,18 +1,130 @@
-<div class="event {{this.type}}">
-    {{#if this.attribute}}
-        <h3><i class="bi bi-shield-shaded"></i> {{this.attribute}}</h3>
-    {{/if}}
-
-    {{#if this.streak}}
-        <h3 class="text-danger"><i class="bi bi-fire"></i> Racha: {{this.streak}}</h3>
-    {{/if}}
-
-    <p>{{this.description}}</p>
-
-    <div class="badges">
-        <span><i class="bi bi-bar-chart"></i> {{this.difficulty}}</span>
-        {{#if this.hour}}
-            <span><i class="bi bi-clock"></i> {{this.hour}}</span>
-        {{/if}}
+<section class="container">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h1 class="h3 fw-bold">Tus tareas</h1>
+            <p class="text-muted mb-0">Aquí aparecen las tareas activas que creaste.</p>
+        </div>
+        <a href="/add" class="btn btn-primary-rpg">Agregar tarea</a>
     </div>
-</div>
+
+    {{#if tasks}}
+        {{#if tasks.length}}
+            <div class="row g-3">
+                {{#each tasks}}
+                    <div class="col-md-6 col-lg-4 task-card" data-id="{{this._id}}">
+                        <div class="card shadow-sm h-100">
+                            <div class="card-body d-flex flex-column">
+                                <div class="mb-3">
+                                    <h5 class="card-title mb-1">{{this.name}}</h5>
+                                    <p class="text-muted small mb-0">Atributo: <strong>{{this.attribute}}</strong></p>
+                                </div>
+                                <p class="card-text mb-3">{{this.description}}</p>
+                                <div class="d-flex justify-content-between align-items-center mb-3">
+                                    <span class="badge bg-secondary">Dificultad: {{this.difficulty}}</span>
+                                    <span class="badge bg-info text-dark">Fin: {{this.end_date}}</span>
+                                </div>
+                                <button type="button" class="btn btn-success btn-sm mt-auto complete-task-btn">
+                                    <i class="bi bi-check-circle"></i> Marcar como realizado
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                {{/each}}
+            </div>
+        {{else}}
+            <div class="alert alert-warning">No tienes tareas activas. Agrega una tarea nueva para empezar.</div>
+        {{/if}}
+    {{else}}
+        <div class="alert alert-warning">No hay tareas disponibles.</div>
+    {{/if}}
+
+    <hr class="my-5">
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h1 class="h3 fw-bold">Tus hábitos</h1>
+            <p class="text-muted mb-0">Aquí aparecen los hábitos activos que creaste.</p>
+        </div>
+    </div>
+
+    {{#if habits}}
+        {{#if habits.length}}
+            <div class="row g-3">
+                {{#each habits}}
+                    <div class="col-md-6 col-lg-4 task-card" data-id="{{this._id}}">
+                        <div class="card shadow-sm h-100">
+                            <div class="card-body d-flex flex-column">
+                                <div class="mb-3">
+                                    <h5 class="card-title mb-1">{{this.name}}</h5>
+                                    <p class="text-muted small mb-0">Días: <strong>{{this.release_date}}</strong></p>
+                                </div>
+                                <p class="card-text mb-3">{{this.description}}</p>
+                                <div class="d-flex justify-content-between align-items-center mb-3">
+                                    <span class="badge bg-secondary">Dificultad: {{this.difficulty}}</span>
+                                    <span class="badge bg-info text-dark">Hora: {{this.hour}}</span>
+                                </div>
+                                <button type="button" class="btn btn-success btn-sm mt-auto complete-habit-btn">
+                                    <i class="bi bi-check-circle"></i> Marcar hábito realizado
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                {{/each}}
+            </div>
+        {{else}}
+            <div class="alert alert-warning">No tienes hábitos activos. Agrega un nuevo hábito para empezar.</div>
+        {{/if}}
+    {{else}}
+        <div class="alert alert-warning">No hay hábitos disponibles.</div>
+    {{/if}}
+</section>
+
+<script>
+    async function completeItem(button, url) {
+        const card = button.closest('.task-card');
+        if (!card) return;
+
+        const itemId = card.dataset.id;
+        if (!itemId) return;
+
+        button.disabled = true;
+        const originalText = button.innerHTML;
+        button.innerHTML = '<i class="bi bi-hourglass-split"></i> Guardando...';
+
+        try {
+            const response = await fetch(`${url}/${itemId}/complete`, {
+                method: 'PATCH',
+                headers: { 'Content-Type': 'application/json' }
+            });
+
+            if (!response.ok) {
+                throw new Error('No se pudo marcar como realizado');
+            }
+
+            card.remove();
+
+            if (!document.querySelector('.task-card')) {
+                document.querySelector('section.container').insertAdjacentHTML('beforeend', '<div class="alert alert-warning mt-4">No tienes tareas o hábitos activos. Agrega una nueva tarea o hábito para empezar.</div>');
+            }
+        } catch (error) {
+            console.error(error);
+            button.disabled = false;
+            button.innerHTML = originalText;
+            alert('Error al marcar como completado. Intenta de nuevo.');
+        }
+    }
+
+    document.addEventListener('click', async (event) => {
+        const taskButton = event.target.closest('.complete-task-btn');
+        if (taskButton) {
+            await completeItem(taskButton, '/tasks');
+            return;
+        }
+
+        const habitButton = event.target.closest('.complete-habit-btn');
+        if (habitButton) {
+            await completeItem(habitButton, '/habits');
+            return;
+        }
+    });
+</script>

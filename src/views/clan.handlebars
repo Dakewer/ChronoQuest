@@ -19,3 +19,50 @@
         <div class="system-msg">Esperando actividad del gremio...</div>
     </div>
 </div>
+
+<script src="https://cdn.socket.io/4.8.3/socket.io.min.js"></script>
+<script>
+    const socket = io();
+    const missionCount = document.getElementById('mission-count');
+    const chatMessages = document.getElementById('chat-messages');
+
+    socket.on('connect', () => {
+        console.log('Socket.IO connected', socket.id);
+        if (chatMessages) {
+            const message = document.createElement('div');
+            message.className = 'mission-toast';
+            message.textContent = 'Conexión al gremio establecida.';
+            chatMessages.appendChild(message);
+        }
+    });
+
+    socket.on('connect_error', (error) => {
+        console.error('Socket.IO connection error', error);
+        if (chatMessages) {
+            const message = document.createElement('div');
+            message.className = 'mission-toast';
+            message.textContent = 'Error de conexión con el gremio.';
+            chatMessages.appendChild(message);
+        }
+    });
+
+    socket.on('disconnect', (reason) => {
+        console.warn('Socket.IO disconnected', reason);
+    });
+
+    socket.on('clan', (data) => {
+        console.log('Socket clan event', data);
+
+        if (missionCount) {
+            missionCount.textContent = data.total || '0';
+        }
+
+        if (chatMessages) {
+            const message = document.createElement('div');
+            message.className = 'mission-toast';
+            message.innerHTML = `<strong>${data.username}</strong> completó <em>${data.misionName}</em>`;
+            chatMessages.appendChild(message);
+            message.scrollIntoView({ behavior: 'smooth', block: 'end' });
+        }
+    });
+</script>
