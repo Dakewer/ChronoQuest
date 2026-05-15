@@ -22,7 +22,7 @@ export function googleAuthMiddlware(app: Application) {
                 name: profile.displayName,
                 email: profile.emails?.[0].value,
                 googleID: profile.id,
-                photo: profile.photos?.[0].value, // aqui se puede suvir las fotos a aws
+                photo: profile.photos?.[0].value,
                 creation_date: new Date()
             });
             await user.save();
