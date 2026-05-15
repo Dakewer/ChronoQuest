@@ -6,11 +6,17 @@ import { checkToken } from "../middleware/checkToken";
 import User, { IUser } from "../models/user";
 import jwt from "jsonwebtoken";
 import { googleAuthMiddlware } from "../middleware/auth";
+//import { MUSIC_URLS } from "../config/s3";
+import { getMusicURLs } from "../config/s3";
 
 const router = express.Router();
 
 // rutas tipo free
 // ingresar
+router.get("/login", async (req, res) => {
+    const music = await getMusicURLs();
+    res.render("login", { layout: "remain", audio: music.CT });
+});
 router.get("/login", (_req, res) => {
     res.render("login", { layout: "remain", audio: "CT.mp3" });
 })
@@ -28,7 +34,7 @@ router.post("/login", async (req, res) => {
             return res.status(404).render("login", { layout: "remain", error: "Usuario no encontrado" });
 
         if (!user.password)
-            return res.status(403).render("login", { layout: "remain", error: "Esta cuenta usa Google para iniciar sesión"});
+            return res.status(403).render("login", { layout: "remain", error: "Esta cuenta usa Google para iniciar sesión" });
 
         const valid = await user.validatePassword(password);
 
@@ -52,6 +58,10 @@ router.post("/login", async (req, res) => {
 });
 
 // registrar
+router.get("/signin", async (req, res) => {
+    const music = await getMusicURLs();
+    res.render("signin", { layout: "remain", audio: music.CT });
+});
 router.get("/signin", (_req, res) => {
     //res.render("signin");
     res.render("signin", { layout: "remain" , audio: "CT.mp3"});
@@ -67,7 +77,6 @@ router.post("/signin", async (req, res) => {
         return res.status(400).render("signin", {layout: "remain", error: "Todos los campos son requeridos", name, email});
 
     try {
-        // Verificar si ya existe
         const existing = await User.findOne({ email });
         if (existing)
             //return res.status(409).render("signin", { layout: "remain", error: "El email ya está registrado" });
@@ -93,14 +102,11 @@ router.post("/signin", async (req, res) => {
     }
 });
 
-// registrarse con el boton de google
 router.get("/signin/google", googleAuthMiddlware, async (req, res) => {
     const { email } = req.body;
-    // crear/obtener datos de google y despues jweb token y redirigir
     const existing = await User.findOne({ email });
     if (existing)
-        return res.status(409).send("El email ya está registrado" );
-    //res.send("ya existen")
+        return res.status(409).send("El email ya está registrado");
 });
 
 router.get("/auth/google",
@@ -122,34 +128,39 @@ router.get("/auth/google/confirm",
 );
 
 // Rutas bloqueadas
-// cambiar a las que deben que estar cerradas, ejemplo
-router.get("/", checkToken, (req, res) => {
-    // res.send('ok')
-    res.render("home", { audio: "DQ.mp3" });
+router.get("/", checkToken, async (req, res) => {
+    const music = await getMusicURLs();
+    res.render("home", { audio: music.DQ });
 });
 
-router.get("/calendar", checkToken, (req, res) => {
-    res.render("calendar", { audio: "DQ.mp3" });
-})
+router.get("/calendar", checkToken, async (req, res) => {
+    const music = await getMusicURLs();
+    res.render("calendar", { audio: music.DQ });
+});
 
-router.get("/profile",checkToken, (req, res) => {
-    res.render("profile", { audio: "KQ.mp3" });
-})
+router.get("/profile", checkToken, async (req, res) => {
+    const music = await getMusicURLs();
+    res.render("profile", { audio: music.KQ });
+});
 
-router.get("/clan", checkToken, (req, res) => {
-    res.render("clan", { audio: "KQ.mp3" });
-})
+router.get("/clan", checkToken, async (req, res) => {
+    const music = await getMusicURLs();
+    res.render("clan", { audio: music.KQ });
+});
 
-router.get("/add", checkToken, (req, res) => {
-    res.render("add", { audio: "DQ.mp3" });
-})
+router.get("/add", checkToken, async (req, res) => {
+    const music = await getMusicURLs();
+    res.render("add", { audio: music.DQ });
+});
 
-router.get("/todo", checkToken, (req, res) => {
-    res.render("todo", { audio: "DQ.mp3" });
-})
+router.get("/todo", checkToken, async (req, res) => {
+    const music = await getMusicURLs();
+    res.render("todo", { audio: music.DQ });
+});
 
-router.get("/settings", checkToken, (req, res) => {
-    res.render("settings", { audio: "NC.mp3" });
-})
+router.get("/settings", checkToken, async (req, res) => {
+    const music = await getMusicURLs();
+    res.render("settings", { audio: music.NC });
+});
 
 export default router;
