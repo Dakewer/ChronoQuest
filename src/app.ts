@@ -12,6 +12,7 @@ import { googleAuthMiddlware } from "./middleware/auth";
 import cookieParser from "cookie-parser";
 //import { STYLE_URLS } from "./config/s3";
 import { getStyleURLs } from "./config/s3";
+import tasksRoutes from "./routes/tasksRoutes";
 
 const port = process.env.PORT || 3005;
 const app = express();
@@ -22,6 +23,9 @@ connectDB();
 app.engine("handlebars", engine());
 app.set("view engine", "handlebars");
 app.set("views", path.join(__dirname, "views"));
+
+//multer
+app.use('/api', tasksRoutes);
 
 app.use(async (req, res, next) => {
     res.locals.styles = await getStyleURLs();
