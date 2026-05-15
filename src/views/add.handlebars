@@ -1,0 +1,125 @@
+<section class="container mt-4">
+    <div class="text-center mb-4">
+        <h2 class="fw-bold" style="color: var(--Midnight);">Nueva Aventura</h2>
+        <p class="text-muted">Elige qué tipo de desafío quieres agregar</p>
+    </div>
+
+    <div class="d-flex justify-content-center gap-3 mb-4">
+        <button onclick="revelacion('tarea')" class="btn btn-primary-rpg px-4 shadow-sm">
+            <i class="bi bi-list-task me-2"></i>Tarea
+        </button>
+        <button onclick="revelacion('habito')" class="btn btn-primary-rpg px-4 shadow-sm" style="background-color: var(--PacificBlue);">
+            <i class="bi bi-arrow-repeat me-2"></i>Hábito
+        </button>
+    </div>
+
+    <div class="card shadow-sm border-0 p-4" style="border-radius: 20px;">
+        
+        <div id="form-tarea" class="d-none">
+            <h3 class="h5 fw-bold mb-3" style="color: var(--DarkTeal);"><i class="bi bi-journal-check me-2"></i>Nueva tarea</h3>
+            <form action="/tasks/add" method="POST">
+                <div class="mb-3">
+                    <label class="form-label fw-bold">Nombre</label>
+                    <input type="text" name="name" class="form-control" placeholder="Estudiar para bases de datos" required>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label fw-bold">Descripción</label>
+                    <textarea name="description" class="form-control" rows="2" placeholder="Detalles de la tarea, entre mas mejor (opcional)"></textarea>
+                </div>
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label fw-bold">Atributo a subir</label>
+                        <select name="attribute" class="form-select" required>
+                            <option value="fuerza">Fuerza</option>
+                            <option value="destresa">Destreza</option>
+                            <option value="constitution">Constitución</option>
+                        </select>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label fw-bold">Dificultad</label>
+                        <select name="difficulty" class="form-select" required>
+                            <option value="1">Muy Fácil</option>
+                            <option value="2">Fácil</option>
+                            <option value="3">Normal</option>
+                            <option value="4">Difícil</option>
+                            <option value="5">Dark souls</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="mb-4">
+                    <label class="form-label fw-bold">Fecha de fin</label>
+                    <input type="date" name="end_date" class="form-control">
+                </div>
+                <button type="submit" class="btn btn-primary-rpg w-100">Crear Tarea</button>
+            </form>
+        </div>
+
+        <div id="form-habito" class="d-none">
+            <h3 class="h5 fw-bold mb-3" style="color: var(--DarkTeal);"><i class="bi bi-arrow-repeat me-2"></i>Nuevo hábito</h3>
+            <form action="/habits/add" method="POST">
+                <div class="mb-3">
+                    <label class="form-label fw-bold">Nombre</label>
+                    <input type="text" name="name" class="form-control" placeholder="Beber 2 litros deagua" required>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label fw-bold">Descripción</label>
+                    <input type="text" name="description" class="form-control" placeholder="¿Por qué es importante?">
+                </div>
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label fw-bold">Dificultad</label>
+                        <select name="difficulty" class="form-select" required>
+                            <option value="1">Muy Fácil</option>
+                            <option value="2">Fácil</option>
+                            <option value="3">Normal</option>
+                            <option value="4">Difícil</option>
+                            <option value="5">Muy Difícil</option>
+                        </select>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label fw-bold">Hora del recordatorio</label>
+                        <input type="time" name="hour" class="form-control">
+                    </div>
+                </div>
+                <div class="mb-4">
+                    <label class="form-label fw-bold d-block" required>Días de repetición</label>
+                    <div class="btn-group w-100" role="group">
+                        <input type="checkbox" class="btn-check" id="L" name="release_date" value="L">
+                        <label class="btn btn-outline-primary" for="L">L</label>
+                        <input type="checkbox" class="btn-check" id="M" name="release_date" value="M">
+                        <label class="btn btn-outline-primary" for="M">M</label>
+                        <input type="checkbox" class="btn-check" id="Mi" name="release_date" value="Mi">
+                        <label class="btn btn-outline-primary" for="Mi">X</label>
+                        <input type="checkbox" class="btn-check" id="J" name="release_date" value="J">
+                        <label class="btn btn-outline-primary" for="J">J</label>
+                        <input type="checkbox" class="btn-check" id="V" name="release_date" value="V">
+                        <label class="btn btn-outline-primary" for="V">V</label>
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-primary-rpg w-100" style="background-color: var(--PacificBlue);">Crear Hábito</button>
+            </form>
+        </div>
+
+    </div>
+</section>
+
+<style>
+    // Estilos para los botones de selección dia
+    .btn-check:checked + .btn-outline-primary {
+        background-color: var(--Wisteria);
+        border-color: var(--Wisteria);
+        color: var(--Midnight);
+    }
+</style>
+
+<script>
+    function revelacion(tipo) {
+        document.getElementById('form-tarea').classList.add('d-none');
+        document.getElementById('form-habito').classList.add('d-none');
+
+        if (tipo === 'tarea')
+            document.getElementById('form-tarea').classList.remove('d-none');
+        else if (tipo === 'habito')
+            document.getElementById('form-habito').classList.remove('d-none');
+    }
+</script>

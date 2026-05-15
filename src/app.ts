@@ -1,21 +1,37 @@
 "use strict";
 // index principal, pero no soy fan de llamar a las cosas index
 // https://drive.google.com/file/d/1aPqWYVzZX_wMz16qbB_6m0hJSwdfTSUy/view
+// npm crate vite 
 import { config } from "dotenv" // <-- debe que iniciarse antesde de las rutas
 config();
 
 import express from "express";
 import path from "path";
+import http from "http";
 import routes from "./routes/routes";
 import { engine } from "express-handlebars";
 import { connectDB } from "./dataBase/mongodb";
 import passport from "passport";
 import { googleAuthMiddlware } from "./middleware/auth";
 import cookieParser from "cookie-parser";
+import { Server as SocketServer } from "socket.io";
+import { motivacion } from "./core/soket";
 
 const port = process.env.PORT || 3005;
 const app = express();
 
+const server = http.createServer(app);
+const io = new SocketServer(server, {
+  cors: {
+    origin: "*",
+    methods: ["GET", "POST"],
+    credentials: true,
+  },
+});
+
+motivacion(io);
+
+// conectar base de datos
 connectDB();
 
 // Configuración de handlebars
@@ -42,6 +58,10 @@ app.use(express.static(path.join(__dirname, "public")));
 app.use("/", routes)
 
 // Muestra el link en la consolo para nomas picarle :)
-app.listen(port, () => {
+//app.listen(port, () => {
+server.listen(port, () => {
     console.log(`Aplicación corriendo en http://localhost:${port}`);
 })
+
+export { app, io, server };
+
