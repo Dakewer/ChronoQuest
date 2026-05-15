@@ -1,4 +1,5 @@
 //import { ClaseAvatar } from "./../../dataBase/mongodb/avatarManager";
+// pum comentario
 
 let ruta = "./public/images/clases/";
 let claseActual = "Knight"; // despues converir en funcion para que lo encuentre
