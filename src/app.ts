@@ -10,11 +10,10 @@ import { connectDB } from "./dataBase/mongodb";
 import passport from "passport";
 import { googleAuthMiddlware } from "./middleware/auth";
 import cookieParser from "cookie-parser";
-//import { STYLE_URLS } from "./config/s3";
 import { getStyleURLs } from "./config/s3";
 import tasksRoutes from "./routes/tasksRoutes";
 
-const port = process.env.PORT || 3005;
+const port = process.env.PORT || 3000;
 const app = express();
 
 connectDB();
@@ -24,19 +23,12 @@ app.engine("handlebars", engine());
 app.set("view engine", "handlebars");
 app.set("views", path.join(__dirname, "views"));
 
-//multer
-app.use('/api', tasksRoutes);
-
-app.use(async (req, res, next) => {
-    res.locals.styles = await getStyleURLs();
-    next();
-});
-
 // Archivos estáticos
 app.use(express.static(path.join(__dirname, "../public")));
 app.use('/css', express.static(path.join(__dirname, '../node_modules/bootstrap/dist/css')));
 app.use('/js', express.static(path.join(__dirname, '../node_modules/bootstrap/dist/js')));
 
+// Body parsers — SIEMPRE antes de las rutas
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
@@ -44,14 +36,14 @@ app.use(cookieParser());
 googleAuthMiddlware(app);
 app.use(passport.initialize());
 
-app.use(express.static(path.join(__dirname, "public")));
-
-// Hace que {{styles.main}} esté disponible en todos los handlebars sin pasarlo en cada ruta
+// Styles disponibles en todos los handlebars
 app.use(async (req, res, next) => {
     res.locals.styles = await getStyleURLs();
     next();
-})
+});
 
+// Rutas
+app.use('/api', tasksRoutes);
 app.use("/", routes);
 
 app.listen(port, () => {
