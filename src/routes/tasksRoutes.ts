@@ -1,7 +1,8 @@
 // Imports
 import { Router } from "express";
-import { createTask, getTasks, getTaskById, updateTask, deleteTask } from "../controllers/taskController";
-
+import { createTask, getTasks, getTaskById, updateTask, deleteTask, completeTask } from "../controllers/taskController";
+import { checkToken } from "../middleware/checkToken";
+ 
 const router = Router();
 
 /**
@@ -93,7 +94,7 @@ const router = Router();
  *       401:
  *         description: Token no proporcionado o inválido
  */
-router.post("/", createTask);
+router.post("/", checkToken, createTask);
 
 
 
@@ -117,7 +118,7 @@ router.post("/", createTask);
  *       401:
  *         description: Token no proporcionado o inválido
  */
-router.get("/", getTasks);
+router.get("/", checkToken, getTasks);
 
 
 
@@ -149,7 +150,7 @@ router.get("/", getTasks);
  *       404:
  *         description: Tarea no encontrada
  */
-router.get("/:id", getTaskById);
+router.get("/:id", checkToken, getTaskById);
 
 
 
@@ -189,7 +190,7 @@ router.get("/:id", getTaskById);
  *       404:
  *         description: Tarea no encontrada
  */
-router.put("/:id", updateTask);
+router.put("/:id", checkToken, updateTask);
 
 
 /**
@@ -216,7 +217,13 @@ router.put("/:id", updateTask);
  *       404:
  *         description: Tarea no encontrada
  */
-router.delete("/:id", deleteTask);
+router.delete("/:id", checkToken, deleteTask);
+
+// ruta formulario
+router.post("/add", checkToken, createTask);
+
+// ruta MISION COMPLITED
+router.patch("/:id/complete", checkToken, completeTask);
 
 // Exports
 export default router;

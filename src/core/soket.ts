@@ -3,23 +3,26 @@ import { Server as SocketServer } from "socket.io";
 let contador = 0;
 
 export const motivacion = (io: SocketServer) => {
-  io.on("connection", (socket) => {
-    console.log("Usuario conectado:", socket.id);
+    io.on("connection", (socket) => {
+        console.log("Usuario conectado:", socket.id);
 
-    socket.on("contador", () => {
-      contador++;
-      console.log("Alguien completó una misión. Total:", contador);
-      io.emit("contador", { contador });
-    });
+        // activar el evento despues de una mision
+        socket.on("mision", (data: { username: string, misionName: string }) => {
+            contador++;
+            console.log(`${data.username} completó: ${data.misionName}. Total:`, contador);
 
-    // Evento de desconexión
-    socket.on("disconnect", () => {
-      console.log("Usuario desconectado:", socket.id);
+            // brodcast
+            io.emit("clan", {
+                total: contador,
+                username: data.username,
+                misionName: data.misionName
+            });
+        });
+
+        socket.on("disconnect", () => {
+            console.log("Usuario desconectado (troste):", socket.id);
+        });
     });
-  });
 };
 
 export const getContador = () => contador;
-export const resetContador = () => {
-  contador = 0;
-};

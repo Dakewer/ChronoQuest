@@ -1,0 +1,18 @@
+<div class="event {{this.type}}">
+    {{#if this.attribute}}
+        <h3><i class="bi bi-shield-shaded"></i> {{this.attribute}}</h3>
+    {{/if}}
+
+    {{#if this.streak}}
+        <h3 class="text-danger"><i class="bi bi-fire"></i> Racha: {{this.streak}}</h3>
+    {{/if}}
+
+    <p>{{this.description}}</p>
+
+    <div class="badges">
+        <span><i class="bi bi-bar-chart"></i> {{this.difficulty}}</span>
+        {{#if this.hour}}
+            <span><i class="bi bi-clock"></i> {{this.hour}}</span>
+        {{/if}}
+    </div>
+</div>

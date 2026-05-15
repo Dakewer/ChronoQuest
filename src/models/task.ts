@@ -9,7 +9,8 @@ const taskSchema = new Schema({
     },
     description: {
         type: String,
-        required: false
+        required: false,
+        default: ""
     },
     difficulty: {
         type: Number,
@@ -25,9 +26,13 @@ const taskSchema = new Schema({
     },
     asignadaA: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'Users',
+        ref: 'User',
         required: true
     },
+    completada: {
+        type: Boolean,
+        default: false
+    }
 })
 
 // Exports

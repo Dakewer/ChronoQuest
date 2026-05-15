@@ -12,8 +12,6 @@ const router = express.Router();
 // rutas tipo free
 // ingresar
 router.get("/login", (_req, res) => {
-    //res.render("login");
-    // res.render("login", { layout: false });
     res.render("login", { layout: "remain", audio: "CT.mp3" });
 })
 

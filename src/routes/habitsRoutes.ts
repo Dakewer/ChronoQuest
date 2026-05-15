@@ -1,6 +1,7 @@
 // Imports
 import { Router } from "express";
 import { createHabit, getHabits, getHabitById, updateHabit, deleteHabit } from "../controllers/habitController";
+import { checkToken } from "../middleware/checkToken";
 
 const router = Router();
 
@@ -108,7 +109,7 @@ const router = Router();
  *       401:
  *         description: Token no proporcionado o inválido
  */
-router.post("/", createHabit);
+router.post("/", checkToken, createHabit);
 
 
 

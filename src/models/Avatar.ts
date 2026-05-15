@@ -29,6 +29,16 @@ const avatarSchema = new Schema({
         type: Number,
         required: true
     },
+    victory: {
+        type: Number,
+        required: true,
+        default: 0
+    },
+    derotas: {
+        type: Number,
+        required: true,
+        default: 0
+    },
     activo: {
         type: Boolean,
         default: true

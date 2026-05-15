@@ -17,7 +17,7 @@ import cookieParser from "cookie-parser";
 import { Server as SocketServer } from "socket.io";
 import { motivacion } from "./core/soket";
 
-const port = process.env.PORT || 3005;
+const port = normalizePort(process.env.PORT || "3005");
 const app = express();
 
 const server = http.createServer(app);
@@ -30,6 +30,14 @@ const io = new SocketServer(server, {
 });
 
 motivacion(io);
+
+function normalizePort(value: string) {
+  const portNumber = parseInt(value, 10);
+  if (Number.isNaN(portNumber)) {
+    return 3005;
+  }
+  return portNumber;
+}
 
 // conectar base de datos
 connectDB();
@@ -61,7 +69,15 @@ app.use("/", routes)
 //app.listen(port, () => {
 server.listen(port, () => {
     console.log(`Aplicación corriendo en http://localhost:${port}`);
-})
+});
+
+server.on("error", (error) => {
+  if (error && (error as NodeJS.ErrnoException).code === "EADDRINUSE") {
+    console.error(`El puerto ${port} ya está en uso. Cambia PORT en tu .env o finaliza el proceso que ocupa ese puerto.`);
+    process.exit(1);
+  }
+  throw error;
+});
 
 export { app, io, server };
 
