@@ -4,16 +4,22 @@ import express from "express";
 import passport from "passport";
 import { checkToken } from "../middleware/checkToken";
 import User, { IUser } from "../models/user";
+import Task from "../models/task";
+import Habit from "../models/habit";
 import jwt from "jsonwebtoken";
 import { googleAuthMiddlware } from "../middleware/auth";
+//import { MUSIC_URLS } from "../config/s3";
+import { getMusicURLs } from "../config/s3";
 
 const router = express.Router();
 
 // rutas tipo free
 // ingresar
-router.get("/login", (req, res) => {
-    //res.render("login");
-    // res.render("login", { layout: false });
+router.get("/login", async (req, res) => {
+    const music = await getMusicURLs();
+    res.render("login", { layout: "remain", audio: music.CT });
+});
+router.get("/login", (_req, res) => {
     res.render("login", { layout: "remain", audio: "CT.mp3" });
 })
 
@@ -30,7 +36,7 @@ router.post("/login", async (req, res) => {
             return res.status(404).render("login", { layout: "remain", error: "Usuario no encontrado" });
 
         if (!user.password)
-            return res.status(403).render("login", { layout: "remain", error: "Esta cuenta usa Google para iniciar sesión"});
+            return res.status(403).render("login", { layout: "remain", error: "Esta cuenta usa Google para iniciar sesión" });
 
         const valid = await user.validatePassword(password);
 
@@ -54,7 +60,11 @@ router.post("/login", async (req, res) => {
 });
 
 // registrar
-router.get("/signin", (req, res) => {
+router.get("/signin", async (req, res) => {
+    const music = await getMusicURLs();
+    res.render("signin", { layout: "remain", audio: music.CT });
+});
+router.get("/signin", (_req, res) => {
     //res.render("signin");
     res.render("signin", { layout: "remain" , audio: "CT.mp3"});
 })
@@ -63,34 +73,42 @@ router.get("/signin", (req, res) => {
 router.post("/signin", async (req, res) => {
     const { name, email, password } = req.body;
 
+    // evitar que cuando este mal borre datos ... pero como
     if (!name || !email || !password)
-        return res.status(400).render("signin", { layout: "remain", error: "Todos los campos son requeridos" });
+        // return res.status(400).render("signin", { layout: "remain", error: "Todos los campos son requeridos" });
+        return res.status(400).render("signin", {layout: "remain", error: "Todos los campos son requeridos", name, email});
 
     try {
-        // Verificar si ya existe
         const existing = await User.findOne({ email });
         if (existing)
-            return res.status(409).render("signin", { layout: "remain", error: "El email ya está registrado" });
+            //return res.status(409).render("signin", { layout: "remain", error: "El email ya está registrado" });
+            return res.status(409).render("signin", {layout: "remain", error: "El email ya está registrado", name, email });
 
         const newUser = new User({ name, email, creation_date: new Date() });
         await newUser.setPassword(password);
         await newUser.save();
 
-        res.redirect("/login");
+        //res.redirect("/login");
+        const token = jwt.sign(
+            { id: newUser._id.toString(), email: newUser.email, name: newUser.name },
+            process.env.JWT_SECRET!,
+            { expiresIn: "24h" }
+        );
+
+        res.cookie("token", token, { httpOnly: true, maxAge: 24 * 60 * 60 * 1000 });
+        res.redirect("/");
+
     } catch (error) {
         console.error("Error en POST /signin:", error);
         res.status(500).render("signin", { layout: "remain", error: "Error interno del servidor" });
     }
 });
 
-// registrarse con el boton de google
 router.get("/signin/google", googleAuthMiddlware, async (req, res) => {
     const { email } = req.body;
-    // crear/obtener datos de google y despues jweb token y redirigir
     const existing = await User.findOne({ email });
     if (existing)
-        return res.status(409).send("El email ya está registrado" );
-    //res.send("ya existen")
+        return res.status(409).send("El email ya está registrado");
 });
 
 router.get("/auth/google",
@@ -112,34 +130,57 @@ router.get("/auth/google/confirm",
 );
 
 // Rutas bloqueadas
-// cambiar a las que deben que estar cerradas, ejemplo
-router.get("/", checkToken, (req, res) => {
-    // res.send('ok')
-    res.render("home", { audio: "DQ.mp3" });
+router.get("/", checkToken, async (req, res) => {
+    const music = await getMusicURLs();
+    res.render("home", { audio: music.DQ });
 });
 
-router.get("/calendar", checkToken, (req, res) => {
-    res.render("calendar", { audio: "DQ.mp3" });
-})
+router.get("/calendar", checkToken, async (req, res) => {
+    const music = await getMusicURLs();
+    res.render("calendar", { audio: music.DQ });
+});
 
-router.get("/profile",checkToken, (req, res) => {
-    res.render("profile", { audio: "KQ.mp3" });
-})
+router.get("/profile", checkToken, async (req, res) => {
+    const music = await getMusicURLs();
+    res.render("profile", { audio: music.KQ });
+});
 
-router.get("/clan", checkToken, (req, res) => {
-    res.render("clan", { audio: "KQ.mp3" });
-})
+router.get("/clan", checkToken, async (req, res) => {
+    const music = await getMusicURLs();
+    res.render("clan", { audio: music.KQ });
+});
 
-router.get("/add", checkToken, (req, res) => {
-    res.render("add", { audio: "DQ.mp3" });
-})
+router.get("/add", checkToken, async (req, res) => {
+    const music = await getMusicURLs();
+    res.render("add", { audio: music.DQ });
+});
 
-router.get("/todo", checkToken, (req, res) => {
-    res.render("todo", { audio: "DQ.mp3" });
-})
+router.get("/todo", checkToken, async (req, res) => {
+    const music = await getMusicURLs();
 
-router.get("/settings", checkToken, (req, res) => {
-    res.render("settings", { audio: "NC.mp3" });
-})
+    const userId = req.Usuario?.id;
+    const tasks = userId
+        ? await Task.find({ asignadaA: userId, completada: false }).lean()
+        : [];
+    const habits = userId
+        ? await Habit.find({ asignadaA: userId, completada: false }).lean()
+        : [];
+
+    const tasksForView = tasks.map((task) => ({
+        ...task,
+        end_date: task.end_date ? new Date(task.end_date).toLocaleDateString("es-ES") : "",
+    }));
+    const habitsForView = habits.map((habit) => ({
+        ...habit,
+        release_date: Array.isArray(habit.release_date) ? habit.release_date.join(', ') : habit.release_date || '',
+    }));
+
+    res.render("todo", { audio: music.DQ, tasks: tasksForView, habits: habitsForView });
+});
+
+router.get("/settings", checkToken, async (req, res) => {
+    const music = await getMusicURLs();
+    res.render("settings", { audio: music.NC });
+});
 
 export default router;

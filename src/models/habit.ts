@@ -9,7 +9,8 @@ const habitSchema = new Schema({
     },
     description: {
         type: String,
-        required: false
+        required: false,
+        default: ""
     },
     difficulty: {
         type: Number,
@@ -17,21 +18,27 @@ const habitSchema = new Schema({
     },
     streak: {
         type: Number,
-        required: true
+        required: true,
+        default: 0
     },
     release_date: {
         type: Array,
         required: true
     },
     hour: {
-        type: Date,
-        required: true
+        type: String,
+        required: false,
+        default: null
     },
     asignadaA: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'Users',
+        ref: 'User',
         required: true
     },
+    completada: {
+        type: Boolean,
+        default: false
+    }
 })
 
 // Exports

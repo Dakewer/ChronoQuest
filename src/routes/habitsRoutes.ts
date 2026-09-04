@@ -1,6 +1,7 @@
 // Imports
 import { Router } from "express";
-import { createHabit, getHabits, getHabitById, updateHabit, deleteHabit } from "../controllers/habitController";
+import { createHabit, getHabits, getHabitById, updateHabit, deleteHabit, completeHabit } from "../controllers/habitController";
+import { checkToken } from "../middleware/checkToken";
 
 const router = Router();
 
@@ -108,7 +109,8 @@ const router = Router();
  *       401:
  *         description: Token no proporcionado o inválido
  */
-router.post("/", createHabit);
+router.post("/", checkToken, createHabit);
+router.post("/add", checkToken, createHabit);
 
 
 
@@ -205,6 +207,7 @@ router.get("/:id", getHabitById);
  *         description: Hábito no encontrado
  */
 router.put("/:id", updateHabit);
+router.patch("/:id/complete", checkToken, completeHabit);
 
 
 

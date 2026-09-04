@@ -1,7 +1,11 @@
 // Imports
+import upload from "../middleware/upload";
+import { s3 } from "../config/s3";
+import { PutObjectCommand } from "@aws-sdk/client-s3";
 import { Router } from "express";
-import { createTask, getTasks, getTaskById, updateTask, deleteTask } from "../controllers/taskController";
-
+import { createTask, getTasks, getTaskById, updateTask, deleteTask, completeTask } from "../controllers/taskController";
+import { checkToken } from "../middleware/checkToken";
+ 
 const router = Router();
 
 /**
@@ -69,6 +73,65 @@ const router = Router();
 
 /**
  * @swagger
+ * /tasks/upload:
+ *   post:
+ *     summary: Subir un archivo adjunto a una tarea en S3
+ *     tags: [Tasks]
+ *     security:
+ *       - bearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         multipart/form-data:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               file:
+ *                 type: string
+ *                 format: binary
+ *     responses:
+ *       200:
+ *         description: Archivo subido exitosamente
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: "Archivo subido exitosamente"
+ *                 key:
+ *                   type: string
+ *                   example: "attachments/1234567890-archivo.pdf"
+ *       400:
+ *         description: No se envió ningún archivo
+ *       500:
+ *         description: Error al subir el archivo
+ */
+router.post("/upload", upload.single("file"), async (req, res) => {
+    try {
+        if (!req.file)
+            return res.status(400).json({ error: "No se envió ningún archivo" });
+
+        const fileName = `attachments/${Date.now()}-${req.file.originalname}`;
+
+        await s3.send(new PutObjectCommand({
+            Bucket: process.env.AWS_BUCKET_NAME!,
+            Key: fileName,
+            Body: req.file.buffer,
+            ContentType: req.file.mimetype,
+        }));
+
+        res.json({ message: "Archivo subido exitosamente", key: fileName });
+
+    } catch (error) {
+        console.error("Error subiendo archivo:", error);
+        res.status(500).json({ error: "Error al subir el archivo" });
+    }
+});
+
+/**
+ * @swagger
  * /tasks:
  *   post:
  *     summary: Crear una nueva tarea
@@ -93,9 +156,8 @@ const router = Router();
  *       401:
  *         description: Token no proporcionado o inválido
  */
-router.post("/", createTask);
-
-
+router.post("/", checkToken, createTask);
+router.post("/add", checkToken, createTask);
 
 /**
  * @swagger
@@ -117,9 +179,7 @@ router.post("/", createTask);
  *       401:
  *         description: Token no proporcionado o inválido
  */
-router.get("/", getTasks);
-
-
+router.get("/", checkToken, getTasks);
 
 /**
  * @swagger
@@ -149,9 +209,7 @@ router.get("/", getTasks);
  *       404:
  *         description: Tarea no encontrada
  */
-router.get("/:id", getTaskById);
-
-
+router.get("/:id", checkToken, getTaskById);
 
 /**
  * @swagger
@@ -189,8 +247,7 @@ router.get("/:id", getTaskById);
  *       404:
  *         description: Tarea no encontrada
  */
-router.put("/:id", updateTask);
-
+router.put("/:id", checkToken, updateTask);
 
 /**
  * @swagger
@@ -216,7 +273,13 @@ router.put("/:id", updateTask);
  *       404:
  *         description: Tarea no encontrada
  */
-router.delete("/:id", deleteTask);
+router.delete("/:id", checkToken, deleteTask);
+
+// ruta formulario
+router.post("/add", checkToken, createTask);
+
+// ruta MISION COMPLITED
+router.patch("/:id/complete", checkToken, completeTask);
 
 // Exports
 export default router;

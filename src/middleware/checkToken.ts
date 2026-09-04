@@ -17,7 +17,7 @@ declare global {
         }
     }
 }
-
+// comentario
 export {};
 
 export const checkToken = async (req: Request, res: Response, next: NextFunction) => {
@@ -30,7 +30,8 @@ export const checkToken = async (req: Request, res: Response, next: NextFunction
     try {
         const secret = process.env.JWT_SECRET;
         if (!secret) 
-            return res.status(500).json({ mensaje: "No se puede aceder al .env." });
+            return res.redirect("/login");
+            // return res.status(500).json({ error: "JWT_SECRET no configurado" });
 
         const decoded = jwt.verify(token, secret) as JwtPayload & { id?: string; email?: string; name?: string; };
         req.Usuario = {

@@ -1,1 +1,62 @@
-<h1>Felicidades este es tu Perfil</h1>
+<div class="profile-page">
+
+    <div class="profile-header">
+        <h1> </h1>  <!-- Nombre de del usuario mongo -->
+        <p>Estadísticas</p> <!-- Del avatar -->
+    </div>
+
+    <div class="profile-grid">
+
+        <!-- CARD PRINCIPAL -->
+        <div class="profile-card hero-card">
+
+            <div class="avatar">
+                <i class="bi bi-person-circle"></i>
+            </div>
+
+            <h2>{{user.name}}</h2>
+            <p class="muted">{{user.email}}</p>
+
+            <span class="badge-role">
+                {{user.role}}
+            </span>
+
+        </div>
+
+        <!-- STATS -->
+        <div class="profile-card stats-card">
+
+            <i class="bi bi-pentagon"></i>
+            <h3>Estadísticas</h3>
+
+            <div class="stat">
+                <span>Strength</span>
+                <div class="bar"><div style="width:70%"></div></div> <!-- calcular con las victorias y derotas del avatar -->
+            </div>
+
+            <div class="stat">
+                <span>Intelligence</span>
+                <div class="bar"><div style="width:85%"></div></div>
+            </div>
+
+            <div class="stat">
+                <span>Discipline</span>
+                <div class="bar"><div style="width:60%"></div></div>
+            </div>
+
+        </div>
+
+        <!-- INFO -->
+        <div class="profile-card info-card">
+
+            <h3>📜 Información</h3>
+
+            <p><strong>ID:</strong> {{user.id}}</p>
+            <p><strong>Rol:</strong> {{user.role}}</p>
+            <p><strong>Estado:</strong> 🟢 Activo</p>
+
+        </div>
+
+    </div>
+
+</div>
